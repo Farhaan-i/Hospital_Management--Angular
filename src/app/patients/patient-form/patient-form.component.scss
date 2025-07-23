@@ -9,21 +9,68 @@
     }
   }
 
-  mat-dialog-content {
+  .form-field {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input, select {
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .error {
+      color: red;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+  }
+
+  .dialog-content {
     min-width: 600px;
     max-height: 70vh;
     overflow-y: auto;
   }
 
-  mat-dialog-actions {
+  .dialog-actions {
     padding: 16px 0;
     margin: 0;
-    
+    text-align: right;
+
     button {
       margin-left: 8px;
-      
-      mat-spinner {
+      padding: 8px 16px;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #1976d2;
+      color: white;
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
         margin-right: 8px;
+        border: 3px solid #fff;
+        border-top: 3px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
       }
     }
   }
@@ -39,7 +86,7 @@
       }
     }
 
-    mat-dialog-content {
+    .dialog-content {
       min-width: unset;
     }
   }
