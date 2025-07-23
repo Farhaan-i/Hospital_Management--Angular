@@ -1,0 +1,64 @@
+<div class="slot-management-container">
+  <h2>Manage Doctor Time Slots</h2>
+  
+  <form [formGroup]="slotForm" (ngSubmit)="generateSlots()">
+    <mat-form-field appearance="fill">
+      <mat-label>Select Doctor</mat-label>
+      <mat-select formControlName="doctorId" required>
+        <mat-option *ngFor="let doctor of doctors" [value]="doctor.doctorId">
+          {{ doctor.doctorName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Start Date</mat-label>
+      <input matInput [matDatepicker]="startPicker" formControlName="startDate" required>
+      <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+      <mat-datepicker #startPicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>End Date</mat-label>
+      <input matInput [matDatepicker]="endPicker" formControlName="endDate" required>
+      <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+      <mat-datepicker #endPicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Daily Start Time</mat-label>
+      <input matInput type="time" formControlName="dailyStartTime" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Daily End Time</mat-label>
+      <input matInput type="time" formControlName="dailyEndTime" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Slot Duration (minutes)</mat-label>
+      <input matInput type="number" formControlName="slotDuration" required>
+    </mat-form-field>
+
+    <div class="button-group">
+      <button 
+        mat-raised-button 
+        color="primary" 
+        type="submit"
+        [disabled]="slotForm.invalid || loading">
+        Generate Slots
+      </button>
+      
+      <button 
+        mat-raised-button 
+        color="warn" 
+        type="button"
+        (click)="deletePastSlots()"
+        [disabled]="!slotForm.get('doctorId')?.value || loading">
+        Delete Past Slots
+      </button>
+    </div>
+  </form>
+
+  <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+</div>

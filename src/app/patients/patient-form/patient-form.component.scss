@@ -1,0 +1,46 @@
+.patient-form-container {
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+
+    .full-width {
+      grid-column: span 2;
+    }
+  }
+
+  mat-dialog-content {
+    min-width: 600px;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  mat-dialog-actions {
+    padding: 16px 0;
+    margin: 0;
+    
+    button {
+      margin-left: 8px;
+      
+      mat-spinner {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .patient-form-container {
+    .form-grid {
+      grid-template-columns: 1fr;
+
+      .full-width {
+        grid-column: span 1;
+      }
+    }
+
+    mat-dialog-content {
+      min-width: unset;
+    }
+  }
+}

@@ -1,0 +1,69 @@
+<div class="patient-form-container">
+  <h2 mat-dialog-title>{{isEditMode ? 'Edit' : 'Add'}} Patient</h2>
+  
+  <mat-dialog-content>
+    <form [formGroup]="patientForm">
+      <div class="form-grid">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Full Name</mat-label>
+          <input matInput formControlName="patientName" required>
+          <mat-error *ngIf="patientForm.get('patientName')?.hasError('required')">
+            Name is required
+          </mat-error>
+          <mat-error *ngIf="patientForm.get('patientName')?.hasError('minlength')">
+            Name must be at least 2 characters long
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="patientEmail" type="email" required>
+          <mat-error *ngIf="patientForm.get('patientEmail')?.hasError('required')">
+            Email is required
+          </mat-error>
+          <mat-error *ngIf="patientForm.get('patientEmail')?.hasError('email')">
+            Please enter a valid email address
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Phone Number</mat-label>
+          <input matInput formControlName="patientPhoneNumber" required>
+          <mat-error *ngIf="patientForm.get('patientPhoneNumber')?.hasError('required')">
+            Phone number is required
+          </mat-error>
+          <mat-error *ngIf="patientForm.get('patientPhoneNumber')?.hasError('pattern')">
+            Please enter a valid 10-digit phone number
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Gender</mat-label>
+          <mat-select formControlName="gender">
+            <mat-option *ngFor="let gender of genders" [value]="gender">
+              {{gender}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Date of Birth</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="patientDateOfBirth">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()" [disabled]="loading">Cancel</button>
+    <button mat-raised-button 
+            color="primary" 
+            (click)="onSubmit()" 
+            [disabled]="!patientForm.valid || loading">
+      <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+      {{isEditMode ? 'Update' : 'Save'}}
+    </button>
+  </mat-dialog-actions>
+</div>

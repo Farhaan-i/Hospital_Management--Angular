@@ -1,0 +1,62 @@
+<div class="doctor-form-container">
+  <h2 mat-dialog-title>{{isEditMode ? 'Edit' : 'Add'}} Doctor</h2>
+  
+  <mat-dialog-content>
+    <form [formGroup]="doctorForm">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Doctor Name</mat-label>
+        <input matInput formControlName="doctorName" required>
+        <mat-error *ngIf="doctorForm.get('doctorName')?.hasError('required')">
+          Doctor name is required
+        </mat-error>
+        <mat-error *ngIf="doctorForm.get('doctorName')?.hasError('minlength')">
+          Name must be at least 2 characters long
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Specialization</mat-label>
+        <mat-select formControlName="specialization" required>
+          <mat-option *ngFor="let spec of specializations" [value]="spec">
+            {{spec}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="doctorForm.get('specialization')?.hasError('required')">
+          Specialization is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="doctorEmail" type="email" required>
+        <mat-error *ngIf="doctorForm.get('doctorEmail')?.hasError('required')">
+          Email is required
+        </mat-error>
+        <mat-error *ngIf="doctorForm.get('doctorEmail')?.hasError('email')">
+          Please enter a valid email address
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Contact Number</mat-label>
+        <input matInput formControlName="doctorContactNumber" required>
+        <mat-error *ngIf="doctorForm.get('doctorContactNumber')?.hasError('required')">
+          Contact number is required
+        </mat-error>
+        <mat-error *ngIf="doctorForm.get('doctorContactNumber')?.hasError('pattern')">
+          Please enter a valid 10-digit contact number
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()" [disabled]="loading">Cancel</button>
+    <button mat-raised-button color="primary" 
+            (click)="onSubmit()" 
+            [disabled]="!doctorForm.valid || loading">
+      <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+      {{isEditMode ? 'Update' : 'Add'}} Doctor
+    </button>
+  </mat-dialog-actions>
+</div>

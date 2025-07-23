@@ -1,0 +1,50 @@
+<div *ngIf="patient; else loading">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Patient Details</mat-card-title>
+      <mat-card-subtitle>ID: {{patient.patientId}}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="details-grid">
+        <div class="detail-row">
+          <span class="label">Name:</span>
+          <span class="value">{{patient.patientName}}</span>
+        </div>
+        
+        <div class="detail-row">
+          <span class="label">Email:</span>
+          <span class="value">{{patient.patientEmail || 'N/A'}}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">Phone:</span>
+          <span class="value">{{patient.patientPhoneNumber}}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">Gender:</span>
+          <span class="value">{{patient.gender || 'N/A'}}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">Date of Birth:</span>
+          <span class="value">{{patient.patientDateOfBirth ? (patient.patientDateOfBirth | date:'mediumDate') : 'N/A'}}</span>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        Back
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+<ng-template #loading>
+  <div class="loading-spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

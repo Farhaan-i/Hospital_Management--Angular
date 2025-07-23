@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Available Slots for Dr. {{data.doctorName}}</h2>
+<mat-dialog-content>
+  <div *ngIf="data.slots.length === 0" class="no-slots">
+    <mat-icon>schedule</mat-icon>
+    <p>No available slots found</p>
+  </div>
+
+  <mat-selection-list *ngIf="data.slots.length > 0">
+    <mat-list-option *ngFor="let slot of data.slots" [value]="slot">
+      {{slot.startTime}} - {{slot.endTime}} ({{slot.slotDate | date}})
+    </mat-list-option>
+  </mat-selection-list>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="onClose()">Close</button>
+</mat-dialog-actions>

@@ -1,0 +1,63 @@
+<div class="staff-form-container">
+  <h2 mat-dialog-title>{{isEditMode ? 'Edit' : 'Add'}} Staff</h2>
+  
+  <mat-dialog-content>
+    <form [formGroup]="staffForm">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Full Name</mat-label>
+        <input matInput formControlName="staffName" required>
+        <mat-error *ngIf="staffForm.get('staffName')?.hasError('required')">
+          Name is required
+        </mat-error>
+        <mat-error *ngIf="staffForm.get('staffName')?.hasError('minlength')">
+          Name must be at least 2 characters long
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Role</mat-label>
+        <mat-select formControlName="staffRole" required>
+          <mat-option *ngFor="let role of roles" [value]="role">
+            {{role}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="staffForm.get('staffRole')?.hasError('required')">
+          Role is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="staffEmail" type="email" required>
+        <mat-error *ngIf="staffForm.get('staffEmail')?.hasError('required')">
+          Email is required
+        </mat-error>
+        <mat-error *ngIf="staffForm.get('staffEmail')?.hasError('email')">
+          Please enter a valid email address
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Phone Number</mat-label>
+        <input matInput formControlName="staffPhoneNumber" required>
+        <mat-error *ngIf="staffForm.get('staffPhoneNumber')?.hasError('required')">
+          Phone number is required
+        </mat-error>
+        <mat-error *ngIf="staffForm.get('staffPhoneNumber')?.hasError('pattern')">
+          Please enter a valid 10-digit phone number
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()" [disabled]="loading">Cancel</button>
+    <button mat-raised-button 
+            color="primary" 
+            (click)="onSubmit()" 
+            [disabled]="!staffForm.valid || loading">
+      <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+      {{isEditMode ? 'Update' : 'Save'}}
+    </button>
+  </mat-dialog-actions>
+</div>

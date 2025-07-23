@@ -1,0 +1,49 @@
+<div *ngIf="staff; else loading">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Staff Details</mat-card-title>
+      <mat-card-subtitle>ID: {{staff.staffId}}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="details-grid">
+        <div class="detail-row">
+          <span class="label">Name:</span>
+          <span class="value">{{staff.staffName}}</span>
+        </div>
+        
+        <div class="detail-row">
+          <span class="label">Role:</span>
+          <span class="value">{{staff.staffRole}}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">Email:</span>
+          <span class="value">{{staff.staffEmail}}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">Phone:</span>
+          <span class="value">{{staff.staffPhoneNumber}}</span>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        Back
+      </button>
+      <button mat-raised-button color="primary" [routerLink]="['/staff', staff.staffId, 'edit']">
+        <mat-icon>edit</mat-icon>
+        Edit Profile
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+<ng-template #loading>
+  <div class="loading-spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

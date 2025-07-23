@@ -1,0 +1,35 @@
+.staff-list-container {
+  padding: 16px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .filter-container {
+    margin-bottom: 16px;
+  }
+
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    padding: 32px;
+  }
+
+  .full-width-table {
+    width: 100%;
+  }
+
+  mat-chip {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  mat-icon {
+    cursor: pointer;
+  }
+}

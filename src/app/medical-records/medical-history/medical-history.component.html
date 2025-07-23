@@ -1,0 +1,190 @@
+<div class="medical-history-container">
+  <div class="header">
+    <h1>Medical History Management</h1>
+    <button mat-raised-button color="primary" (click)="toggleAddForm()">
+      <mat-icon>{{showAddForm ? 'close' : 'add'}}</mat-icon>
+      {{showAddForm ? 'Cancel' : 'Add Record'}}
+    </button>
+  </div>
+
+  <!-- Add Medical History Form -->
+  <mat-card *ngIf="showAddForm" class="add-form-card">
+    <mat-card-header>
+      <mat-card-title>Add Medical History</mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <form [formGroup]="medicalHistoryForm" (ngSubmit)="addMedicalHistory()">
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Patient</mat-label>
+            <mat-select formControlName="patientId" required>
+              <mat-option *ngFor="let patient of patients" [value]="patient.patientId">
+                {{patient.patientName}} - {{patient.patientPhoneNumber}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="medicalHistoryForm.get('patientId')?.hasError('required')">
+              Please select a patient
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Date Recorded</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="dateRecorded" required>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="medicalHistoryForm.get('dateRecorded')?.hasError('required')">
+              Date is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Diagnosis</mat-label>
+            <textarea matInput 
+                     formControlName="diagnosis" 
+                     rows="3" 
+                     placeholder="Enter diagnosis details..."
+                     required></textarea>
+            <mat-error *ngIf="medicalHistoryForm.get('diagnosis')?.hasError('required')">
+              Diagnosis is required
+            </mat-error>
+            <mat-error *ngIf="medicalHistoryForm.get('diagnosis')?.hasError('minlength')">
+              Diagnosis must be at least 3 characters long
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Treatment</mat-label>
+            <textarea matInput 
+                     formControlName="treatment" 
+                     rows="3" 
+                     placeholder="Enter treatment details..."
+                     required></textarea>
+            <mat-error *ngIf="medicalHistoryForm.get('treatment')?.hasError('required')">
+              Treatment is required
+            </mat-error>
+            <mat-error *ngIf="medicalHistoryForm.get('treatment')?.hasError('minlength')">
+              Treatment must be at least 3 characters long
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div class="form-actions">
+          <button mat-raised-button 
+                  color="primary" 
+                  type="submit" 
+                  [disabled]="!medicalHistoryForm.valid || loading">
+            <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+            Add Medical History
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Filter Section -->
+  <mat-card class="filter-card">
+    <mat-card-content>
+      <div class="filter-section">
+        <mat-form-field appearance="outline">
+          <mat-label>Filter by Patient</mat-label>
+          <mat-select (selectionChange)="loadPatientHistory($event.value)">
+            <mat-option *ngFor="let patient of patients" [value]="patient.patientId">
+              {{patient.patientName}} - {{patient.patientPhoneNumber}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Search Records</mat-label>
+          <input matInput (keyup)="applyFilter($event)" 
+                 placeholder="Search by diagnosis or treatment...">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <button mat-button color="accent" (click)="clearFilter()" *ngIf="selectedPatientId">
+          <mat-icon>clear</mat-icon>
+          Clear Filter
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Medical History Table -->
+  <mat-card>
+    <mat-card-content>
+      <div *ngIf="loading" class="loading-spinner">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <div class="table-container" *ngIf="!loading">
+        <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
+          
+          <ng-container matColumnDef="historyId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+            <td mat-cell *matCellDef="let history">#{{history.historyId}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="patientId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Patient</th>
+            <td mat-cell *matCellDef="let history">
+              {{getPatientName(history.patientId)}}
+              <br>
+              <small class="patient-id">ID: {{history.patientId}}</small>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="diagnosis">
+            <th mat-header-cell *matHeaderCellDef>Diagnosis</th>
+            <td mat-cell *matCellDef="let history">
+              <div class="diagnosis-cell">
+                {{history.diagnosis}}
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="treatment">
+            <th mat-header-cell *matHeaderCellDef>Treatment</th>
+            <td mat-cell *matCellDef="let history">
+              <div class="treatment-cell">
+                {{history.treatment}}
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="dateRecorded">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Date Recorded</th>
+            <td mat-cell *matCellDef="let history">
+              {{history.dateRecorded | date:'medium'}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let history">
+              <button mat-icon-button color="primary"
+                      (click)="editMedicalHistory(history)"
+                      matTooltip="Edit Record">
+                <mat-icon>edit</mat-icon>
+              </button>
+              
+              <button mat-icon-button color="warn"
+                      (click)="deleteMedicalHistory(history)"
+                      matTooltip="Delete Record">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" 
+                       showFirstLastButtons
+                       aria-label="Select page of medical histories">
+        </mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

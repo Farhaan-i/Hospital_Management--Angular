@@ -1,0 +1,54 @@
+.doctor-details-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+
+  .doctor-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+
+    .info-row {
+      display: flex;
+      flex-direction: column;
+      
+      .label {
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.6);
+        font-size: 14px;
+      }
+      
+      .value {
+        font-size: 16px;
+        margin-top: 4px;
+      }
+    }
+  }
+
+  mat-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px;
+    
+    button {
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .doctor-details-container {
+    .doctor-info {
+      grid-template-columns: 1fr;
+    }
+  }
+}

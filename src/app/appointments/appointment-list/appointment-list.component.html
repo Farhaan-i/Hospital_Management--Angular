@@ -1,0 +1,105 @@
+<div class="appointment-list-container">
+  <div class="header">
+    <h1>Appointment Management</h1>
+    <div class="action-buttons">
+      <button mat-raised-button color="primary" routerLink="/appointments/book">
+        <mat-icon>add</mat-icon>
+        Book Appointment
+      </button>
+    </div>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      <div class="filter-container">
+        <mat-form-field appearance="outline">
+          <mat-label>Search Appointments</mat-label>
+          <input matInput (keyup)="applyFilter($event)" 
+                 placeholder="Search by ID, patient, or doctor...">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="loading" class="loading-spinner">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <div class="table-container" *ngIf="!loading">
+        <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
+          
+          <ng-container matColumnDef="appointmentId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+            <td mat-cell *matCellDef="let appointment">#{{appointment.appointmentId}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="patientId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Patient</th>
+            <td mat-cell *matCellDef="let appointment">{{getPatientName(appointment.patientId)}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="doctorId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Doctor</th>
+            <td mat-cell *matCellDef="let appointment">{{getDoctorName(appointment.doctorId)}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="appointmentDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Date & Time</th>
+            <td mat-cell *matCellDef="let appointment">
+              {{appointment.appointmentDate | date:'medium'}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let appointment">
+              <mat-chip-set>
+                <mat-chip [color]="getStatusColor(appointment.status)" selected>
+                  {{appointment.status}}
+                </mat-chip>
+              </mat-chip-set>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let appointment">
+              <button mat-icon-button color="primary"
+                      [routerLink]="['/appointments', appointment.appointmentId]"
+                      matTooltip="View Details">
+                <mat-icon>visibility</mat-icon>
+              </button>
+
+              <button mat-icon-button color="primary"
+                      [routerLink]="['/appointments', appointment.appointmentId, 'edit']"
+                      matTooltip="Edit Appointment"
+                      [disabled]="appointment.status === 'Cancelled'">
+                <mat-icon>edit</mat-icon>
+              </button>
+              
+              <button mat-icon-button color="accent"
+                      (click)="cancelAppointment(appointment)"
+                      matTooltip="Cancel Appointment"
+                      [disabled]="appointment.status === 'Cancelled'">
+                <mat-icon>cancel</mat-icon>
+              </button>
+              
+              <button mat-icon-button color="warn" 
+                      (click)="deleteAppointment(appointment)"
+                      matTooltip="Delete Appointment">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" 
+                       showFirstLastButtons
+                       aria-label="Select page of appointments">
+        </mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

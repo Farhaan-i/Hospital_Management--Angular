@@ -1,0 +1,26 @@
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding: 16px;
+}
+
+.detail-row {
+  display: flex;
+  align-items: center;
+}
+
+.label {
+  font-weight: 500;
+  min-width: 100px;
+}
+
+.value {
+  margin-left: 16px;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  padding: 32px;
+}
