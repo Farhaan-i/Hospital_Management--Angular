@@ -74,6 +74,12 @@
                         <mat-icon>delete</mat-icon>
                       </button>
         
+                      <button mat-icon-button color="primary"
+                              (click)="viewDoctorDetails(doctor.doctorId)"
+                              matTooltip="View Details">
+                        <mat-icon>visibility</mat-icon>
+                      </button>
+
                       <button mat-icon-button color="accent"
                               (click)="viewSlots(doctor)"
                               matTooltip="View Slots">

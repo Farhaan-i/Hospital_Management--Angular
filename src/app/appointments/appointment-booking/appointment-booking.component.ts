@@ -1,15 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PatientService } from '../../patients/services/patient.service';
-import { DoctorService } from '../../doctors/services/doctor.service';
-import { AppointmentService } from '../services/appointment.service';
-import { Patient } from '../../core/models/patient.model';
-import { Doctor } from '../../core/models/doctor.model';
-import { Slot, CreateAppointmentRequest } from '../../core/models/appointment.model';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { MatDatepicker } from '@angular/material/datepicker';
+import { AppointmentService } from '../services/appointment.service';
+import { PatientService } from '../../patients/services/patient.service';
+import { DoctorService } from '../../doctors/services/doctor.service';
 import { SlotService } from '../services/slot.service';
+import { Patient } from '../../core/models/patient.model';
+import { Doctor } from '../../core/models/doctor.model';
+import { Slot } from '../../core/models/slot.model';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-appointment-booking',
@@ -17,188 +18,235 @@ import { SlotService } from '../services/slot.service';
   styleUrls: ['./appointment-booking.component.scss']
 })
 export class AppointmentBookingComponent implements OnInit {
-  @ViewChild('picker') datePicker!: MatDatepicker<Date>;
   bookingForm: FormGroup;
+  step: number = 1;
+  maxStep: number = 4;
+  minDate: Date = new Date();
+
   patients: Patient[] = [];
+  filteredPatients: Patient[] = [];
   doctors: Doctor[] = [];
+  filteredDoctors: Doctor[] = [];
   availableSlots: Slot[] = [];
-  loading = false;
-  step = 1;
-  maxStep = 4;
-  minDate = new Date();
+  allDoctorSlots: Slot[] = [];
+  loading: boolean = false;
+  enabler = true;
+
+  patientSearchControl: FormControl = new FormControl();
+  doctorSearchControl: FormControl = new FormControl();
 
   constructor(
     private fb: FormBuilder,
+    private appointmentService: AppointmentService,
     private patientService: PatientService,
     private doctorService: DoctorService,
-    private appointmentService: AppointmentService,
     private slotService: SlotService,
     private snackBar: MatSnackBar,
     private router: Router
   ) {
+    console.log('Component initialized');
     this.bookingForm = this.fb.group({
-      patientId: ['', Validators.required],
-      doctorId: ['', Validators.required],
-      appointmentDate: ['', Validators.required],
-      slotId: ['', Validators.required]
+      patientId: [null, Validators.required],
+      doctorId: [null, Validators.required],
+      appointmentDate: [null, Validators.required],
+      slotId: [null, Validators.required]
     });
   }
 
   ngOnInit(): void {
+    console.log('ngOnInit called');
     this.loadPatients();
     this.loadDoctors();
 
-    // Check if we're editing an existing appointment
-    const appointmentId = this.router.url.split('/').pop();
-    if (appointmentId && !isNaN(+appointmentId)) {
-      this.loading = true;
-      this.appointmentService.getAppointmentById(+appointmentId).subscribe({
-        next: (appointment) => {
-          this.bookingForm.patchValue({
-            patientId: appointment.patientId,
-            doctorId: appointment.doctorId,
-            appointmentDate: new Date(appointment.appointmentDate)
-          });
-          this.loading = false;
-        },
-        error: (error) => {
-          console.error('Error loading appointment:', error);
-          this.loading = false;
-        }
-      });
-    }
+    this.bookingForm.get('appointmentDate')?.valueChanges.subscribe(() => {
+      console.log('Appointment date changed:', this.bookingForm.get('appointmentDate')?.value);
+      if (this.step === 4) {
+        console.log('Filtering slots on date change');
+        this.filterSlotsByDate();
+      }
+    });
+  }
+
+  displayPatient(patient: Patient): string {
+    console.log('Display patient:', patient);
+    return patient ? `${patient.patientName} (ID: ${patient.patientId})` : '';
+  }
+
+  displayDoctor(doctor: Doctor): string {
+    console.log('Display doctor:', doctor);
+    return doctor ? `${doctor.doctorId} - Dr. ${doctor.doctorName} - ${doctor.specialization}` : '';
+  }
+
+  formatTime(timeString: string): string {
+    const [hours, minutes] = timeString.split(':');
+    const hourNum = parseInt(hours, 10);
+    const period = hourNum >= 12 ? 'PM' : 'AM';
+    const displayHour = hourNum % 12 || 12;
+    const formatted = `${displayHour}:${minutes} ${period}`;
+    console.log('Formatted time:', formatted);
+    return formatted;
   }
 
   loadPatients(): void {
-    this.patientService.getAllPatients().subscribe(patients => {
+    console.log('Loading patients...');
+    this.patientService.getAllPatients().subscribe((patients: Patient[]) => {
+      console.log('Patients loaded:', patients);
       this.patients = patients;
+      this.filteredPatients = [...patients];
     });
   }
 
   loadDoctors(): void {
-    this.doctorService.getAllDoctors().subscribe(doctors => {
+    console.log('Loading doctors...');
+    this.doctorService.getAllDoctors().subscribe((doctors: Doctor[]) => {
+      console.log('Doctors loaded:', doctors);
       this.doctors = doctors;
+      this.filteredDoctors = [...doctors];
     });
   }
 
-  onDoctorChange(): void {
-    this.bookingForm.get('appointmentDate')?.reset();
-    this.bookingForm.get('slotId')?.reset();
+  fetchUnbookedSlots(doctorId: number): void {
+    console.log('Fetching unbooked slots for doctor ID:', doctorId);
+    this.loading = true;
+    this.slotService.getUnbookedSlots(doctorId).subscribe({
+      next: (slots: Slot[]) => {
+        console.log('Unbooked slots:', slots);
+        this.allDoctorSlots = slots;
+        this.filterSlotsByDate();
+        this.loading = false;
+      },
+      error: () => {
+        console.error('Error fetching slots');
+        this.snackBar.open('Error fetching unbooked slots', 'Close', { duration: 3000 });
+        this.allDoctorSlots = [];
+        this.loading = false;
+      }
+    });
   }
 
+  filterSlotsByDate(): void {
+    const selectedDate = this.bookingForm.get('appointmentDate')?.value;
+    console.log('Filtering slots for date:', selectedDate);
 
-  nextStep(): void {
-    if (this.step < this.maxStep) {
-      this.step++;
-      
-      // If moving to step 3 (date selection) and doctor is selected, fetch slots
-      if (this.step === 3 && this.bookingForm.get('doctorId')?.value) {
-        this.onDateChange();
-      }
+    if (!selectedDate || !this.allDoctorSlots.length) {
+      console.log('No date selected or no slots available');
+      this.availableSlots = [];
+      return;
+    }
+
+    const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
+    console.log('Formatted selected date:', formattedDate);
+
+    this.availableSlots = this.allDoctorSlots.filter(slot => {
+      const slotDate = new Date(slot.slotDate).toISOString().split('T')[0];
+      return slotDate === formattedDate;
+    });
+
+    console.log('Filtered available slots:', this.availableSlots);
+  }
+
+  previousStep(): void {
+    console.log('Previous button clicked - Current step:', this.step);
+    if (this.step > 1) {
+      this.step--;
+      console.log('Moved to previous step:', this.step);
     }
   }
 
-  prevStep(): void {
-    if (this.step > 1) {
-      this.step--;
+  nextStep(): void {
+    console.log('Next button clicked - Current step:', this.step);
+    const valid = this.isStepValid();
+    console.log('Step valid:', valid);
+    if (this.step < this.maxStep && valid) {
+      this.step++;
+      this.enabler = true;
+      console.log('Moved to next step:', this.step);
+      if (this.step === 4) {
+        console.log('Step 4 reached - filtering slots');
+        this.filterSlotsByDate();
+      }
+    } else {
+      console.warn('Cannot proceed to next step - form is invalid or max step reached');
     }
   }
 
   isStepValid(): boolean {
-    const form = this.bookingForm;
+    const patientValid: boolean = this.bookingForm.get('patientId')?.valid ?? false;
+    const doctorValid: boolean = this.bookingForm.get('doctorId')?.valid ?? false;
+    const dateValid: boolean = this.bookingForm.get('appointmentDate')?.valid ?? false;
+    const slotValid: boolean = this.bookingForm.get('slotId')?.valid ?? false;
+
+    console.log('Validation status → Patient:', patientValid, 'Doctor:', doctorValid, 'Date:', dateValid, 'Slot:', slotValid);
+
     switch (this.step) {
-      case 1:
-        return !!form.get('patientId')?.valid;
-      case 2:
-        return !!form.get('doctorId')?.valid;
-      case 3:
-        return !!form.get('appointmentDate')?.valid;
-      case 4:
-        return !!form.get('slotId')?.valid;
-      default:
-        return false;
+      case 1: return patientValid;
+      case 2: return doctorValid;
+      case 3: return dateValid;
+      case 4: return slotValid;
+      default: return false;
     }
   }
 
-  ngAfterViewInit() {
-    // Auto-advance when step is completed
-    this.bookingForm.valueChanges.subscribe(() => {
-      if (this.isStepValid() && this.step < this.maxStep) {
-        setTimeout(() => {
-          this.nextStep();
-        }, 300); // Small delay for better UX
-      }
-    });
+  onPatientChange(event: MatAutocompleteSelectedEvent): void {
+    const selectedPatient = event.option.value;
+    console.log('Patient selected:', selectedPatient);
+    this.bookingForm.get('patientId')?.setValue(selectedPatient.patientId);
+    this.enabler = false;
+    this.snackBar.open('Patient selected. You can now proceed to the next step.', 'Close', { duration: 3000 });
   }
 
-  onDateChange(): void {
-    const doctorId = this.bookingForm.get('doctorId')?.value;
-    const date = this.bookingForm.get('appointmentDate')?.value;
-    
-    if (doctorId && date) {
-      this.loading = true;
-      const formattedDate = date.toISOString().split('T')[0];
-      this.slotService.getAvailableSlots(doctorId, formattedDate)
-        .subscribe({
-          next: (slots) => {
-            this.availableSlots = slots;
-            this.loading = false;
-            if (slots.length > 0) {
-              this.step = 4; // Auto-advance to slot selection
-            }
-          },
-          error: (error) => {
-            console.error('Error fetching slots:', error);
-            this.snackBar.open('Error checking slot availability', 'Close', { duration: 3000 });
-            this.availableSlots = [];
-            this.loading = false;
-          }
-        });
+  onDoctorChange(event: MatAutocompleteSelectedEvent): void {
+    const selectedDoctor = event.option.value;
+    console.log('Doctor selected:', selectedDoctor);
+    this.bookingForm.get('doctorId')?.setValue(selectedDoctor.doctorId);
+    this.fetchUnbookedSlots(selectedDoctor.doctorId);
+    this.enabler = false;
+    this.snackBar.open('Doctor selected. Please proceed to the next step.', 'Close', { duration: 3000 });
+  }
+
+  onDateChange(event: MatDatepickerInputEvent<Date>): void {
+    const selectedDate = event.value;
+    if (selectedDate) {
+      (this.bookingForm.get('appointmentDate') as FormControl).setValue(selectedDate);
+      this.enabler = false;
+      this.filterSlotsByDate();
+      this.snackBar.open('Date selected. Proceed to the next step.', 'Close', { duration: 3000 });
+    } else {
+      console.warn('Invalid date selected');
     }
   }
 
+  
   bookAppointment(): void {
+    console.log('Confirm button clicked. Form valid?', this.bookingForm.valid);
     if (this.bookingForm.valid) {
       this.loading = true;
-      const formData = this.bookingForm.value;
-      const appointmentId = this.router.url.split('/').pop();
-      
-      const appointmentData: CreateAppointmentRequest = {
-        patientId: formData.patientId,
-        doctorId: formData.doctorId,
-        appointmentDate: formData.appointmentDate,
-        status: 'Scheduled' as 'Scheduled' | 'Completed' | 'Cancelled'
+      const formValue = this.bookingForm.value;
+
+      const request = {
+        patientId: formValue.patientId,
+        doctorId: formValue.doctorId,
+        slotId: formValue.slotId,
+        appointmentDate: new Date(formValue.appointmentDate),
+        status: 'Booked' as const
       };
 
-      const operation = appointmentId && !isNaN(+appointmentId)
-        ? this.appointmentService.updateAppointment(+appointmentId, appointmentData)
-        : this.appointmentService.bookAppointment(appointmentData);
+      console.log('Booking appointment request:', request);
 
-      operation.subscribe({
+      this.appointmentService.bookAppointment(request).subscribe({
         next: () => {
-          const message = appointmentId
-            ? 'Appointment updated successfully'
-            : 'Appointment booked successfully';
-          this.snackBar.open(message, 'Close', { duration: 3000 });
+          console.log('Appointment booked successfully!');
+          this.snackBar.open('Appointment booked successfully!', 'Close', { duration: 3000 });
           this.router.navigate(['/appointments']);
         },
-        error: (error) => {
-          console.error('Error saving appointment:', error);
-          const message = appointmentId
-            ? 'Error updating appointment'
-            : 'Error booking appointment';
-          this.snackBar.open(message, 'Close', { duration: 3000 });
+        error: () => {
+          console.error('Booking failed');
+          this.snackBar.open('Failed to book appointment', 'Close', { duration: 3000 });
           this.loading = false;
         }
       });
+    } else {
+      console.warn('Form is invalid — cannot book appointment');
     }
-  }
-
-  getSelectedPatient(): Patient | undefined {
-    return this.patients.find(p => p.patientId === this.bookingForm.get('patientId')?.value);
-  }
-
-  getSelectedDoctor(): Doctor | undefined {
-    return this.doctors.find(d => d.doctorId === this.bookingForm.get('doctorId')?.value);
   }
 }

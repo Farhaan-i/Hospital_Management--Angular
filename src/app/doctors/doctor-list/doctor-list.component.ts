@@ -88,6 +88,10 @@ export class DoctorListComponent implements OnInit {
     this.router.navigate(['/doctors/slots']);
   }
 
+  viewDoctorDetails(doctorId: number): void {
+    this.router.navigate(['/doctors', doctorId]);
+  }
+
   viewSlots(doctor: Doctor): void {
     this.loading = true;
     

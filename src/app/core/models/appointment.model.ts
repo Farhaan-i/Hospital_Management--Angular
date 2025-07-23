@@ -3,14 +3,15 @@ export interface Appointment {
   patientId: number;
   doctorId: number;
   appointmentDate: Date;
-  status: 'Scheduled' | 'Completed' | 'Cancelled';
+  status: 'Scheduled' | 'Completed' | 'Cancelled' | 'Booked';
 }
 
 export interface CreateAppointmentRequest {
   patientId: number;
   doctorId: number;
   appointmentDate: Date;
-  status: 'Scheduled' | 'Completed' | 'Cancelled';
+  status: 'Scheduled' | 'Completed' | 'Cancelled' | 'Booked';
+  slotId: number;
 }
 
 export interface Slot {
