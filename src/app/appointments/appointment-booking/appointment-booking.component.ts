@@ -216,13 +216,14 @@ export class AppointmentBookingComponent implements OnInit {
     }
   }
 
-  
+
   bookAppointment(): void {
     console.log('Confirm button clicked. Form valid?', this.bookingForm.valid);
     if (this.bookingForm.valid) {
       this.loading = true;
       const formValue = this.bookingForm.value;
-
+      console.log("..............uuu...................");
+      console.log(formValue);
       const request = {
         patientId: formValue.patientId,
         doctorId: formValue.doctorId,
@@ -230,8 +231,10 @@ export class AppointmentBookingComponent implements OnInit {
         appointmentDate: new Date(formValue.appointmentDate),
         status: 'Booked' as const
       };
+      console.log('1111111111111111111oooo11111111111111111111');
+      console.log(request);
 
-      console.log('Booking appointment request:', request);
+      
 
       this.appointmentService.bookAppointment(request).subscribe({
         next: () => {

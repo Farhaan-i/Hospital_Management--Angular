@@ -3,6 +3,7 @@ export interface Appointment {
   patientId: number;
   doctorId: number;
   appointmentDate: Date;
+  slotId: number;  // 👈 Add this field!
   status: 'Scheduled' | 'Completed' | 'Cancelled' | 'Booked';
 }
 

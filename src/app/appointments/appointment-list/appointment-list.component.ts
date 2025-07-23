@@ -3,13 +3,16 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { AppointmentService } from '../services/appointment.service';
-import { Appointment } from '../../core/models/appointment.model';
-import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { PatientService } from '../../patients/services/patient.service';
 import { DoctorService } from '../../doctors/services/doctor.service';
+import { SlotService } from '../services/slot.service'; 
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
+
+import { Appointment } from '../../core/models/appointment.model';
 import { Patient } from '../../core/models/patient.model';
 import { Doctor } from '../../core/models/doctor.model';
+import { Slot } from '../../core/models/slot.model';
 
 @Component({
   selector: 'app-appointment-list',
@@ -22,6 +25,7 @@ export class AppointmentListComponent implements OnInit {
     'patientId',
     'doctorId',
     'appointmentDate',
+    'timeSlots',       // 👈 Add this!
     'status',
     'actions'
   ];
@@ -29,6 +33,7 @@ export class AppointmentListComponent implements OnInit {
   loading = false;
   patients: Patient[] = [];
   doctors: Doctor[] = [];
+  slotMap: Map<number, Slot> = new Map();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -37,6 +42,7 @@ export class AppointmentListComponent implements OnInit {
     private appointmentService: AppointmentService,
     private patientService: PatientService,
     private doctorService: DoctorService,
+    private slotService: SlotService,
     private dialog: MatDialog
   ) {}
 
@@ -46,16 +52,33 @@ export class AppointmentListComponent implements OnInit {
     this.loadDoctors();
   }
 
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
   loadAppointments(): void {
     this.loading = true;
     this.appointmentService.getAllAppointments().subscribe({
       next: (appointments) => {
         this.dataSource.data = appointments;
+        this.fetchAllSlots(appointments);
         this.loading = false;
       },
       error: (error) => {
         console.error('Error loading appointments:', error);
         this.loading = false;
+      }
+    });
+  }
+
+  fetchAllSlots(appointments: Appointment[]): void {
+    appointments.forEach(appointment => {
+      if (appointment.slotId && !this.slotMap.has(appointment.slotId)) {
+        this.slotService.getSlotById(appointment.slotId).subscribe({
+          next: (slot) => this.slotMap.set(appointment.slotId, slot),
+          error: (err) => console.error(`Failed to fetch slot ${appointment.slotId}`, err)
+        });
       }
     });
   }
@@ -70,11 +93,6 @@ export class AppointmentListComponent implements OnInit {
     this.doctorService.getAllDoctors().subscribe(doctors => {
       this.doctors = doctors;
     });
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   applyFilter(event: Event): void {
@@ -96,9 +114,20 @@ export class AppointmentListComponent implements OnInit {
     return doctor ? `Dr. ${doctor.doctorName}` : 'Unknown Doctor';
   }
 
+  getTimeSlot(slotId: number): string {
+    const slot = this.slotMap.get(slotId);
+    if (!slot) return 'Fetching...';
+    return `${slot.startTime} to ${slot.endTime}`;
+  }
+  getSlotDate(slotId: number): string {
+    const slot = this.slotMap.get(slotId);
+    return slot ? new Date(slot.slotDate).toLocaleDateString() : '—';
+  }
+
   getStatusColor(status: string): string {
     switch (status?.toLowerCase()) {
       case 'scheduled': return 'primary';
+      case 'booked': return 'accent';
       case 'completed': return 'accent';
       case 'cancelled': return 'warn';
       default: return '';

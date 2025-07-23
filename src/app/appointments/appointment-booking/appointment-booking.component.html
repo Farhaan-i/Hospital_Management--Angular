@@ -74,11 +74,13 @@
   </div>
 
   <!-- Display available time slots -->
-  <mat-radio-group formControlName="slotId" *ngIf="availableSlots.length > 0">
-    <mat-radio-button *ngFor="let slot of availableSlots" [value]="slot.slotId">
-      {{ formatTime(slot.startTime) }} - {{ formatTime(slot.endTime) }}
-    </mat-radio-button>
-  </mat-radio-group>
+  <div [formGroup]="bookingForm">
+    <mat-radio-group formControlName="slotId" *ngIf="availableSlots.length > 0">
+      <mat-radio-button *ngFor="let slot of availableSlots" [value]="slot.slotId">
+        {{ formatTime(slot.startTime) }} - {{ formatTime(slot.endTime) }}
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
 </mat-step>
 
       </mat-horizontal-stepper>
@@ -86,7 +88,8 @@
   
     <mat-card-actions>
       <button mat-button (click)="previousStep()" [disabled]="step === 1">Previous</button>
-      <button mat-button (click)="nextStep()" [disabled]="enabler">Next</button>
+
+      <button mat-button (click)="nextStep()" *ngIf="step!==maxStep" [disabled]="enabler">Next</button>
       <button mat-raised-button color="primary"
               (click)="bookAppointment()"
               *ngIf="step === maxStep"
