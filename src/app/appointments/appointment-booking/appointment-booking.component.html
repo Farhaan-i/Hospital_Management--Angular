@@ -4,17 +4,17 @@
       <mat-card-title>Book New Appointment</mat-card-title>
       <mat-card-subtitle>Step {{step}} of {{maxStep}}</mat-card-subtitle>
     </mat-card-header>
-
+    
     <mat-card-content>
       <mat-horizontal-stepper [selectedIndex]="step - 1" #stepper>
-
+        
         <!-- Step 1: Select Patient -->
         <mat-step label="Select Patient">
           <div class="step-content">
             <h3>Choose Patient</h3>
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Select Patient</mat-label>
-              <mat-select formControlName="patientId" required (selectionChange)="onSelectionChange()">
+              <mat-select formControlName="patientId" required>
                 <mat-option *ngFor="let patient of patients" [value]="patient.patientId">
                   {{patient.patientName}} - {{patient.patientPhoneNumber}}
                 </mat-option>
@@ -23,7 +23,7 @@
                 Please select a patient
               </mat-error>
             </mat-form-field>
-
+            
             <div class="selected-info" *ngIf="getSelectedPatient()">
               <h4>Selected Patient:</h4>
               <p><strong>Name:</strong> {{getSelectedPatient()?.patientName}}</p>
@@ -39,7 +39,7 @@
             <h3>Choose Doctor</h3>
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Select Doctor</mat-label>
-              <mat-select formControlName="doctorId" required (selectionChange)="onDoctorSelected(); onDoctorChange()">
+              <mat-select formControlName="doctorId" (selectionChange)="onDoctorChange()" required>
                 <mat-option *ngFor="let doctor of doctors" [value]="doctor.doctorId">
                   Dr. {{doctor.doctorName}} - {{doctor.specialization}}
                 </mat-option>
@@ -48,7 +48,7 @@
                 Please select a doctor
               </mat-error>
             </mat-form-field>
-
+            
             <div class="selected-info" *ngIf="getSelectedDoctor()">
               <h4>Selected Doctor:</h4>
               <p><strong>Name:</strong> Dr. {{getSelectedDoctor()?.doctorName}}</p>
@@ -64,10 +64,10 @@
             <h3>Choose Appointment Date</h3>
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Appointment Date</mat-label>
-              <input matInput
-                     [matDatepicker]="picker"
-                     formControlName="appointmentDate"
-                     (dateChange)="onDateSelected()"
+              <input matInput 
+                     [matDatepicker]="picker" 
+                     formControlName="appointmentDate" 
+                     (dateChange)="onDateChange()"
                      [min]="minDate"
                      required>
               <mat-hint>Select a future date</mat-hint>
@@ -84,21 +84,21 @@
         <mat-step label="Select Time Slot">
           <div class="step-content">
             <h3>Choose Available Time Slot</h3>
-
+            
             <div *ngIf="loading" class="loading-spinner">
               <mat-spinner></mat-spinner>
               <p>Loading available slots...</p>
             </div>
-
+            
             <div *ngIf="availableSlots.length === 0 && !loading" class="no-slots">
               <mat-icon>schedule</mat-icon>
               <p>No available slots for the selected date. Please choose a different date.</p>
             </div>
-
+            
             <div *ngIf="availableSlots.length > 0 && !loading" class="slots-grid">
-              <mat-radio-group formControlName="slotId" (change)="onSlotSelected()">
-                <mat-radio-button
-                  *ngFor="let slot of availableSlots"
+              <mat-radio-group formControlName="slotId">
+                <mat-radio-button 
+                  *ngFor="let slot of availableSlots" 
                   [value]="slot.slotId"
                   class="slot-radio">
                   {{slot.startTime}} - {{slot.endTime}}
@@ -118,7 +118,7 @@
                 [disabled]="step === 1">
           Previous
         </button>
-
+        
         <button mat-raised-button
                 color="primary"
                 (click)="nextStep()"
@@ -126,7 +126,7 @@
                 [disabled]="!isStepValid()">
           {{step === 3 ? 'View Available Slots' : 'Next'}}
         </button>
-
+        
         <button mat-raised-button
                 color="primary"
                 (click)="bookAppointment()"
