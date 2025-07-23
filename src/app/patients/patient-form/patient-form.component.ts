@@ -1,33 +1,19 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
 import { PatientService } from '../services/patient.service';
 import { Patient, CreatePatientRequest } from '../../core/models/patient.model';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { CommonModule } from '@angular/common';
+
+// DialogRef and MAT_DIALOG_DATA are kept if you're still using dialog open/close from Angular Material.
+// If you're replacing that too, these should be removed.
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-patient-form',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    MatSnackBarModule
+    ReactiveFormsModule
   ],
   templateUrl: './patient-form.component.html',
   styleUrls: ['./patient-form.component.scss']
@@ -46,7 +32,7 @@ export class PatientFormComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: Patient
   ) {
     this.isEditMode = !!data;
-    
+
     this.patientForm = this.fb.group({
       patientName: [data?.patientName || '', [Validators.required, Validators.minLength(2)]],
       patientEmail: [data?.patientEmail || '', [Validators.email]],
@@ -74,9 +60,7 @@ export class PatientFormComponent implements OnInit {
 
       if (this.isEditMode) {
         this.patientService.updatePatient(this.data.patientId, formData).subscribe({
-          next: () => {
-            this.dialogRef.close(true);
-          },
+          next: () => this.dialogRef.close(true),
           error: (error) => {
             console.error('Error updating patient:', error);
             this.loading = false;
@@ -84,9 +68,7 @@ export class PatientFormComponent implements OnInit {
         });
       } else {
         this.patientService.createPatient(formData).subscribe({
-          next: () => {
-            this.dialogRef.close(true);
-          },
+          next: () => this.dialogRef.close(true),
           error: (error) => {
             console.error('Error registering patient:', error);
             this.loading = false;
