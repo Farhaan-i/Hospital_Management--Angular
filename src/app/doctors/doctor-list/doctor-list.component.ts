@@ -85,7 +85,7 @@ export class DoctorListComponent implements OnInit {
   }
 
   openSlotManagement(): void {
-    this.router.navigate(['/doctors/slots']);
+    this.router.navigate(['/doctors/1/slots']);
   }
 
   viewDoctorDetails(doctorId: number): void {
