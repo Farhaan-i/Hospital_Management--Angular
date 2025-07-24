@@ -1,9 +1,9 @@
 <div class="patient-form-container">
-  
   <div class="dialog-content">
-    <form [formGroup]="patientForm">
+    <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
+
       <div class="main heading">
-      <h2 >{{isEditMode ? 'Edit' : 'Add'}} Patient</h2>
+        <h2>{{ isEditMode ? 'Edit' : 'Add' }} Patient</h2>
       </div>
 
       <div class="form-grid">
@@ -44,7 +44,7 @@
         <div class="form-field full-width">
           <label for="gender">Gender</label>
           <select id="gender" formControlName="gender">
-            <option *ngFor="let gender of genders" [value]="gender">{{gender}}</option>
+            <option *ngFor="let gender of genders" [value]="gender">{{ gender }}</option>
           </select>
         </div>
 
@@ -54,14 +54,15 @@
         </div>
 
       </div>
-    </form>
-  </div>
 
-  <div class="dialog-actions">
-    <button type="button" (click)="onCancel()" [disabled]="loading">Cancel</button>
-    <button type="submit" (click)="onSubmit()" [disabled]="!patientForm.valid || loading">
-      <span class="spinner" *ngIf="loading"></span>
-      {{isEditMode ? 'Update' : 'Save'}}
-    </button>
+      <div class="dialog-actions">
+        <button type="button" (click)="onCancel()" [disabled]="loading">Cancel</button>
+        <button type="submit" [disabled]="!patientForm.valid || loading">
+          <span class="spinner" *ngIf="loading"></span>
+          {{ isEditMode ? 'Update' : 'Save' }}
+        </button>
+      </div>
+
+    </form>
   </div>
 </div>

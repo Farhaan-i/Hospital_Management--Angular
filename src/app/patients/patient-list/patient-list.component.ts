@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -14,7 +14,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './patient-list.component.html',
   styleUrls: ['./patient-list.component.scss']
 })
-export class PatientListComponent implements OnInit {
+export class PatientListComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'patientId',
     'patientName',
@@ -39,7 +39,7 @@ export class PatientListComponent implements OnInit {
     this.loadPatients();
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -49,6 +49,10 @@ export class PatientListComponent implements OnInit {
     this.patientService.getAllPatients().subscribe({
       next: (patients) => {
         this.dataSource.data = patients;
+        // Reset paginator to first page on reload
+        if (this.dataSource.paginator) {
+          this.dataSource.paginator.firstPage();
+        }
         this.loading = false;
       },
       error: (error) => {
@@ -76,7 +80,7 @@ export class PatientListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.loadPatients();
+        this.loadPatients();  // Reload patients after a successful add/update and dialog close
       }
     });
   }

@@ -24,7 +24,8 @@ export class PatientService {
     return this.http.post<Patient>(this.apiUrl, patient);
   }
 
-  updatePatient(id: number, patient: CreatePatientRequest): Observable<Patient> {
+  // Use Patient instead of CreatePatientRequest here:
+  updatePatient(id: number, patient: Patient): Observable<Patient> {
     return this.http.put<Patient>(`${this.apiUrl}/${id}`, patient);
   }
 
