@@ -1,0 +1,50 @@
+.landing-background {
+  height: 100vh;
+  width: 100%;
+  background-image: url('/assets/healthback.jpg'); // Correct path
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: flex-start; // Align content to top
+  justify-content: flex-start; // Align content to left
+  padding: 3rem; // Add spacing from top and left
+
+  .overlay {
+    background-color: rgba(255, 255, 255, 0.185); // semi-transparent white
+    padding: 2rem 3rem;
+    border-radius: 10px;
+    text-align: left;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+
+    h1 {
+      font-size: 3rem;
+      font-style:Helvetica;
+      color: #00796b;
+      margin-bottom: 2rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      font-style:italic;
+      color: #333;
+      margin-bottom: 2rem;
+    }
+
+    button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #004d40;
+      }
+    }
+  }
+}

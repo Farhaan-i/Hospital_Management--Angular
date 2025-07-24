@@ -26,9 +26,11 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { DatePipe } from '@angular/common';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 @NgModule({
   declarations: [
+    LandingPageComponent,
     AppComponent
   ],
   imports: [

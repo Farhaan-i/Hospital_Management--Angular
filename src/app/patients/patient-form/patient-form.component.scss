@@ -1,8 +1,37 @@
 .patient-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 32px 32px 32px 32px;
+  background: linear-gradient(135deg, #e0f7fa, #eceff1);
+  border-radius: 16px;
+  
+
+   .dialog-content {
+    display: flex;
+    min-width: 20px;
+    max-width: 90vw;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: #ffffff;
+    padding: 28px;
+    border-radius: 12px;
+    box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.03);
+  }
+
+  h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #37474f;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
   .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 30px;
 
     .full-width {
       grid-column: span 2;
@@ -14,55 +43,72 @@
     flex-direction: column;
 
     label {
-      margin-bottom: 5px;
-      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #455a64;
     }
 
-    input, select {
-      padding: 8px;
-      font-size: 14px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+    input,
+    select {
+      padding: 12px 14px;
+      font-size: 15px;
+      border: 1px solid #b0bec5;
+      border-radius: 10px;
+      background: #ffffff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+
+      &:focus {
+        border-color: #0097a7;
+        box-shadow: 0 0 8px rgba(0, 151, 167, 0.3);
+        outline: none;
+      }
     }
 
     .error {
-      color: red;
-      font-size: 12px;
-      margin-top: 4px;
+      color: #d50000;
+      font-size: 13px;
+      margin-top: 6px;
+      font-weight: 500;
     }
   }
 
-  .dialog-content {
-    min-width: 600px;
-    max-height: 70vh;
-    overflow-y: auto;
-  }
+ 
 
   .dialog-actions {
-    padding: 16px 0;
-    margin: 0;
-    text-align: right;
+    padding: 24px 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
 
     button {
-      margin-left: 8px;
-      padding: 8px 16px;
-      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 24px;
+      font-size: 15px;
+      font-weight: 600;
       border: none;
-      border-radius: 4px;
+      border-radius: 10px;
       cursor: pointer;
-      background-color: #1976d2;
+      background-image: linear-gradient(to right, #3f51b5, #1a237e);
       color: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: background 0.3s ease;
+
+      &:hover:not(:disabled) {
+        background-image: linear-gradient(to right, #5c6bc0, #283593);
+      }
 
       &:disabled {
-        opacity: 0.6;
+        opacity: 0.5;
         cursor: not-allowed;
       }
 
       .spinner {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        margin-right: 8px;
+        width: 18px;
+        height: 18px;
         border: 3px solid #fff;
         border-top: 3px solid transparent;
         border-radius: 50%;
@@ -70,7 +116,9 @@
       }
 
       @keyframes spin {
-        to { transform: rotate(360deg); }
+        to {
+          transform: rotate(360deg);
+        }
       }
     }
   }
@@ -88,6 +136,10 @@
 
     .dialog-content {
       min-width: unset;
+    }
+
+    h2 {
+      font-size: 24px;
     }
   }
 }
