@@ -1,49 +1,73 @@
-// register.component.scss
-
 .register-container {
-    max-width: 500px;
-    margin: 3rem auto;
-    padding: 2rem;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  background: url('https://wallpaperbat.com/img/645546-hospital-wallpaper-top-free-hospital-background.jpg') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Roboto Slab', serif;
+
+  form {
+    width: 100%;
+    max-width: 450px; // Same as login form
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    border-radius: 16px;
+
     h2 {
       text-align: center;
-      font-weight: 600;
-      color: #343a40;
+      font-weight: 700;
+      color: #000000;
+      font-size: 2rem;
+      font-family: 'Roboto Slab', serif; // Applied to heading
+      margin-bottom: 2rem;
     }
-  
+
     .form-group {
+      margin-bottom: 1.5rem;
+
       label {
-        font-weight: 500;
+        font-weight: 600;
         margin-bottom: 0.5rem;
         display: block;
       }
-  
+
       input,
       select {
-        border-radius: 4px;
-        padding: 0.5rem;
+        border-radius: 8px;
+        padding: 0.6rem;
         font-size: 1rem;
+        width: 100%;
       }
-  
+
       .text-danger {
         font-size: 0.875rem;
         margin-top: 0.25rem;
+        color: red;
       }
     }
-  
+
     .btn {
       font-weight: 600;
       padding: 0.75rem;
       font-size: 1rem;
+      border-radius: 8px;
+      background-color: #28a745;
+      color: white;
+
+      &:hover {
+        background-color: #218838;
+      }
     }
-  
+
     .text-success,
     .text-danger {
       text-align: center;
       font-weight: 500;
+      margin-top: 1rem;
     }
   }
-  
+}
