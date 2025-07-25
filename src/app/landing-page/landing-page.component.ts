@@ -10,6 +10,6 @@ export class LandingPageComponent {
   constructor(private router: Router) {}
 
   goToDashboard() {
-    this.router.navigate(['/patients']);
+    this.router.navigate(['/login']);
   }
 }

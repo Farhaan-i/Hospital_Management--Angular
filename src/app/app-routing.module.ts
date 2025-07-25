@@ -8,7 +8,7 @@ import { DoctorDashboardComponent } from './components/doctor-dashboard/doctor-d
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
-  //{ path: '', component: LandingPageComponent },
+  { path: '', component: LandingPageComponent },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
