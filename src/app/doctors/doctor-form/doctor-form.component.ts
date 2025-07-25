@@ -16,25 +16,10 @@ export class DoctorFormComponent implements OnInit {
   loading = false;
 
   specializations = [
-    'Cardiology',
-    'Dermatology',
-    'Emergency Medicine',
-    'Endocrinology',
-    'Gastroenterology',
-    'Hematology',
-    'Infectious Disease',
-    'Nephrology',
-    'Neurology',
-    'Oncology',
-    'Ophthalmology',
-    'Orthopedics',
-    'Otolaryngology',
-    'Pediatrics',
-    'Psychiatry',
-    'Pulmonology',
-    'Radiology',
-    'Rheumatology',
-    'Urology'
+    'Cardiology', 'Dermatology', 'Emergency Medicine', 'Endocrinology',
+    'Gastroenterology', 'Hematology', 'Infectious Disease', 'Nephrology',
+    'Neurology', 'Oncology', 'Ophthalmology', 'Orthopedics', 'Otolaryngology',
+    'Pediatrics', 'Psychiatry', 'Pulmonology', 'Radiology', 'Rheumatology', 'Urology'
   ];
 
   constructor(
@@ -42,16 +27,16 @@ export class DoctorFormComponent implements OnInit {
     private doctorService: DoctorService,
     private snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<DoctorFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Doctor
+    @Inject(MAT_DIALOG_DATA) public data: Doctor | null
   ) {
     this.isEditMode = !!data;
-    
+
     this.doctorForm = this.fb.group({
       doctorName: [data?.doctorName || '', [Validators.required, Validators.minLength(2)]],
       specialization: [data?.specialization || '', Validators.required],
       doctorEmail: [data?.doctorEmail || '', [Validators.required, Validators.email]],
       doctorContactNumber: [data?.doctorContactNumber || '', [
-        Validators.required, 
+        Validators.required,
         Validators.pattern('^[0-9]{10}$')
       ]]
     });
@@ -60,42 +45,47 @@ export class DoctorFormComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmit(): void {
-    if (this.doctorForm.valid) {
-      this.loading = true;
-      const formData: CreateDoctorRequest = this.doctorForm.value;
+    if (this.doctorForm.invalid) {
+      this.doctorForm.markAllAsTouched();
+      return;
+    }
+    this.loading = true;
+    const formData: CreateDoctorRequest = this.doctorForm.value;
 
-      if (this.isEditMode) {
-        this.doctorService.updateDoctor(this.data.doctorId, formData).subscribe({
-          next: () => {
-            this.snackBar.open('Doctor updated successfully', 'Close', { duration: 3000 });
-            this.dialogRef.close(true);
-          },
-          error: (error) => {
-            console.error('Error updating doctor:', error);
-            this.snackBar.open('Error updating doctor', 'Close', { duration: 3000 });
-            this.loading = false;
+    if (this.isEditMode && this.data) {
+      // Update doctor
+      this.doctorService.updateDoctor(this.data.doctorId, formData).subscribe({
+        next: () => {
+          this.snackBar.open('Doctor updated successfully', 'Close', { duration: 3000 });
+          this.dialogRef.close(true);
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error updating doctor:', error);
+          this.snackBar.open('Error updating doctor', 'Close', { duration: 3000 });
+          this.loading = false;
+        }
+      });
+    } else {
+      // Add new doctor - backend returns plain text message
+      this.doctorService.addDoctor(formData).subscribe({
+        next: (res: string) => {
+          this.snackBar.open(res || 'Doctor added successfully', 'Close', { duration: 3000 });
+          this.dialogRef.close(true);
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error adding doctor:', error);
+          if (error.status === 400) {
+            this.snackBar.open('Validation error: ' + (error.error?.message || ''), 'Close', { duration: 3000 });
+          } else if (error.status === 409) {
+            this.snackBar.open('Doctor already exists', 'Close', { duration: 3000 });
+          } else {
+            this.snackBar.open('Failed to add doctor', 'Close', { duration: 3000 });
           }
-        });
-      } else {
-        this.doctorService.addDoctor(formData).subscribe({
-          next: () => {
-            this.snackBar.open('Doctor added successfully', 'Close', { duration: 3000 });
-            this.dialogRef.close(true);
-          },
-          error: (error) => {
-            console.error('Error adding doctor:', error);
-            if (error.status === 400) {
-              this.snackBar.open('Validation error: ' + error.error, 'Close', { duration: 3000 });
-            } else if (error.status === 409) {
-              this.snackBar.open('Doctor already exists', 'Close', { duration: 3000 });
-            } else {
-              this.snackBar.open('Doctor added successfully (please refresh to see changes)', 'Close', { duration: 3000 });
-              this.dialogRef.close(true);
-            }
-            this.loading = false;
-          }
-        });
-      }
+          this.loading = false;
+        }
+      });
     }
   }
 
@@ -103,3 +93,5 @@ export class DoctorFormComponent implements OnInit {
     this.dialogRef.close(false);
   }
 }
+
+

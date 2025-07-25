@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -16,7 +16,7 @@ import { SlotDialogComponent } from './slot-dialog/slot-dialog.component';
   templateUrl: './doctor-list.component.html',
   styleUrls: ['./doctor-list.component.scss']
 })
-export class DoctorListComponent implements OnInit {
+export class DoctorListComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'doctorId',
     'doctorName',
@@ -65,17 +65,27 @@ export class DoctorListComponent implements OnInit {
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
 
+  // 🔴 ESSENTIAL CHANGE: for Add, pass null; for Edit, pass doctor object
   openDoctorForm(doctor?: Doctor): void {
-    const dialogRef = this.dialog.open(DoctorFormComponent, {
-      width: '500px',
-      data: { doctor }
-    });
+    let dialogRef;
+    if (doctor) {
+      // Edit mode
+      dialogRef = this.dialog.open(DoctorFormComponent, {
+        width: '500px',
+        data: doctor
+      });
+    } else {
+      // Add mode
+      dialogRef = this.dialog.open(DoctorFormComponent, {
+        width: '500px',
+        data: null
+      });
+    }
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -94,7 +104,6 @@ export class DoctorListComponent implements OnInit {
 
   viewSlots(doctor: Doctor): void {
     this.loading = true;
-    
     this.slotService.getUnbookedSlots(doctor.doctorId).subscribe({
       next: (slots) => {
         this.dialog.open(SlotDialogComponent, {
