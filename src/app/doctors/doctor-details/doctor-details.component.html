@@ -11,7 +11,7 @@
           <span class="label">Name:</span>
           <span class="value">Dr. {{doctor.doctorName}}</span>
         </div>
-        
+
         <div class="detail-row">
           <span class="label">Specialization:</span>
           <span class="value">{{doctor.specialization}}</span>
@@ -38,10 +38,12 @@
         <mat-icon>calendar_today</mat-icon>
         View Appointments
       </a>
+      <!--
       <button mat-raised-button color="primary" [routerLink]="['/doctors', doctor.doctorId, 'edit']">
         <mat-icon>edit</mat-icon>
         Edit Profile
       </button>
+    -->
       <button mat-raised-button color="primary" [routerLink]="['/doctors', doctor.doctorId, 'slots']">
         <mat-icon>schedule</mat-icon>
         Manage Slots
