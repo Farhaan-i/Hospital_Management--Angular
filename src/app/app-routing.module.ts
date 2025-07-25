@@ -20,7 +20,7 @@ const routes: Routes = [
     data: { role: 'Doctor' }
   },
   /*{ 
-    path: 'staff-dashboard', 
+    path: 'dashboard-staff', 
     component: StaffDashboardComponent, 
     canActivate: [AuthGuard],
     data: { role: 'Staff' }

@@ -8,6 +8,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { StaffFormComponent } from '../staff-form/staff-form.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../../services/auth.service';
+
 
 @Component({
   selector: 'app-staff-list',
@@ -25,6 +27,8 @@ export class StaffListComponent implements OnInit {
   ];
   dataSource = new MatTableDataSource<Staff>();
   loading = false;
+  isDisplay=false;
+
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -32,11 +36,20 @@ export class StaffListComponent implements OnInit {
   constructor(
     private staffService: StaffService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    this.loadStaff();
+    const userRole = this.authService.getCurrentUser()?.role;
+    console.log('Logged-in role:', userRole); // optional debugging
+  
+    this.isDisplay = userRole !== 'Staff'; // true = hide staff UI
+    console.log('............................uuuuuuuuuu...........................'); // optional debugging
+    console.log('isDisplay:', this.isDisplay); // optional debugging
+    if (!this.isDisplay) {
+      this.loadStaff(); // ✅ only load data if user is authorized
+    }
   }
 
   ngAfterViewInit() {

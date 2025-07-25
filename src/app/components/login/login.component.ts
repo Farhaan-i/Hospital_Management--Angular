@@ -38,7 +38,7 @@ export class LoginComponent {
         if (response.role === 'Doctor') {
           this.router.navigate(['/doctor-dashboard']);
         } else {
-          this.router.navigate(['/staff-dashboard']);
+          this.router.navigate(['/patients']);
         }
         console.log(".........................uuu.............................");
         console.log(response);

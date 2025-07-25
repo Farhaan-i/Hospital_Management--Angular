@@ -1,6 +1,22 @@
 .staff-list-container {
   padding: 16px;
 
+
+  .display-message {
+    color: #f44336;
+    font-size: 50px;
+    font-weight: bold;
+    height: 500px;
+    width:90%x;
+    background-color: rgba(255, 0, 0, 0.08);
+    border: 1px dashed #f44336;
+    text-align: center;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .header {
     display: flex;
     justify-content: space-between;
