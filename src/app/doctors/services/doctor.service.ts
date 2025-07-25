@@ -20,8 +20,12 @@ export class DoctorService {
     return this.http.get<Doctor>(`${this.apiUrl}/${id}`);
   }
 
-  addDoctor(doctor: CreateDoctorRequest): Observable<Doctor> {
-    return this.http.post<Doctor>(this.apiUrl, doctor);
+  /**
+   * IMPORTANT:
+   * Set responseType to 'text' because backend returns plain text (not JSON)
+   */
+  addDoctor(doctor: CreateDoctorRequest): Observable<string> {
+    return this.http.post(this.apiUrl, doctor, { responseType: 'text' });
   }
 
   updateDoctor(id: number, doctor: CreateDoctorRequest): Observable<Doctor> {

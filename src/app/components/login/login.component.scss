@@ -1,3 +1,15 @@
+/* Soft fade & lift animation */
+@keyframes softFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .login-container {
   height: 100vh;
   background: url('https://wallpaperbat.com/img/645546-hospital-wallpaper-top-free-hospital-background.jpg') no-repeat center center;
@@ -5,15 +17,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
 
   .login-card {
     width: 450px;
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 16px;
+    animation: softFadeUp 0.8s ease-out;
 
     .card-body {
       padding: 2.5rem;
+
+      > * {
+        animation: softFadeUp 0.8s ease-out;
+        animation-delay: 0.2s;
+        animation-fill-mode: both;
+      }
 
       .card-title {
         font-weight: 700;
@@ -39,7 +57,7 @@
 
       .invalid-feedback {
         font-size: 0.8rem;
-        color : red;
+        color: red;
       }
 
       .alert {
@@ -53,23 +71,28 @@
         font-size: 0.8rem;
         font-style: Arial;
         border-radius: 8px;
-        color : white;
-        background-color: #3f51b5; // buttin color
+        color: white;
+        background-color: #3f51b5;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #303f9f;
+        }
       }
 
       .spinner-border {
         vertical-align: middle;
       }
 
-      .text-center {
-        a {
-          color: #000000;
-          font-weight: 500;
+      .text-center a {
+        color: #000000;
+        font-weight: 500;
+        transition: background-color 0.3s ease, text-decoration 0.3s ease;
 
-          &:hover {
-            text-decoration: underline;
-            background-color: #45454530; 
-          }
+        &:hover {
+          text-decoration: underline;
+          background-color: #45454530;
         }
       }
     }
