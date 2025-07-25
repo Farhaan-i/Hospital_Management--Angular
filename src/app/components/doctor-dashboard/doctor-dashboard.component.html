@@ -1,82 +1,83 @@
 <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-2 bg-dark text-white min-vh-100">
-        <div class="p-3">
-          <h4>Doctor Portal</h4>
-          <hr>
-          <ul class="nav flex-column">
-            <li class="nav-item">
-              <a class="nav-link text-white" routerLink="/doctor-dashboard">Dashboard</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" routerLink="/appointments">My Appointments</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" routerLink="/medical-records">Medical Records</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" routerLink="/slots">My Slots</a>
-            </li>
-          </ul>
-        </div>
+  <div class="row">
+    <div class="col-md-2 bg-dark text-white min-vh-100 sidebar">
+      <div class="p-3">
+        <h4>Doctor Portal</h4>
+        <hr>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link text-white" routerLink="/doctor-dashboard">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" routerLink="/appointments">My Appointments</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" routerLink="/medical-records">Medical Records</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" routerLink="/slots">My Slots</a>
+          </li>
+        </ul>
       </div>
-      
-      <div class="col-md-10">
-        <div class="p-4">
-          <h2>Welcome, Dr. {{ currentUser?.username }}</h2>
-          
-          <div class="row mt-4">
-            <div class="col-md-6">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Today's Appointments</h5>
-                  <p class="card-text display-4">{{ todaysAppointments.length }}</p>
-                </div>
-              </div>
-            </div>
-            
-            <div class="col-md-6">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Quick Actions</h5>
-                  <button class="btn btn-primary me-2" routerLink="/appointments">View Appointments</button>
-                  <button class="btn btn-success" routerLink="/medical-records">Medical Records</button>
-                </div>
+    </div>
+
+    <div class="col-md-10 main-content">
+      <div class="p-4">
+        <h2>Welcome, Dr. {{ currentUser?.username }}</h2>
+
+        <div class="row mt-4">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Today's Appointments</h5>
+                <p class="card-text display-4">{{ todaysAppointments.length }}</p>
               </div>
             </div>
           </div>
-  
-          <div class="row mt-4" *ngIf="todaysAppointments.length > 0">
-            <div class="col-12">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Today's Schedule</h5>
-                  <div class="table-responsive">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th>Time</th>
-                          <th>Patient ID</th>
-                          <th>Status</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let appointment of todaysAppointments">
-                          <td>{{ appointment.appointmentDate | date:'short' }}</td>
-                          <td>{{ appointment.patientId }}</td>
-                          <td>
-                            <span class="badge bg-success" *ngIf="appointment.status === 'Booked'">{{ appointment.status }}</span>
-                            <span class="badge bg-warning" *ngIf="appointment.status === 'Cancelled'">{{ appointment.status }}</span>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Quick Actions</h5>
+                <button class="btn btn-primary me-2" routerLink="/appointments">View Appointments</button>
+                <button class="btn btn-success" routerLink="/medical-records">Medical Records</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4" *ngIf="todaysAppointments.length > 0">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Today's Schedule</h5>
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Time</th>
+                        <th>Patient ID</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let appointment of todaysAppointments">
+                        <td>{{ appointment.appointmentDate | date:'short' }}</td>
+                        <td>{{ appointment.patientId }}</td>
+                        <td>
+                          <span class="badge bg-success" *ngIf="appointment.status === 'Booked'">{{ appointment.status }}</span>
+                          <span class="badge bg-warning" *ngIf="appointment.status === 'Cancelled'">{{ appointment.status }}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </div>
+</div>

@@ -1,86 +1,172 @@
-// doctor-dashboard.component.scss
+/* Animations */
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
+@keyframes gentlePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes softBounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Container */
 .container-fluid {
-    padding: 0;
+  padding: 1rem;
+  background-color: #f4f7fa;
+  animation: fadeSlide 1s ease-out;
+}
+
+/* Sidebar */
+.sidebar {
+  min-height: 10vh;
+  padding: 1.5rem;
+  background: linear-gradient(to bottom, #158aff, #34495e);
+  color: #fff;
+  animation: fadeSlide 1s ease-in;
+
+  h4 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding : 1rem;
   }
-  
-  .bg-dark {
-    background-color: #343a40 !important;
-  }
-  
-  .sidebar {
-    min-height: 100vh;
-    padding: 1rem;
-    background-color: #212529;
-    color: #fff;
-  
-    h4 {
-      margin-bottom: 1rem;
+
+  .nav-link {
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-size: 1.1rem;
+    color: #ffffff;
+    transition: background-color 0.4s ease;
+
+    &:hover {
+      background-color: #3f6ad8;
+      text-decoration: none;
     }
-  
-    .nav-link {
-      padding: 0.5rem 1rem;
+  }
+}
+
+/* Main Content */
+.main-content {
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 0.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  animation: fadeSlide 0.8s ease-in-out;
+
+  h2 {
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    color: #2e2e2e;
+  }
+
+  .card {
+    margin-bottom: 1.5rem;
+    border: 1px solid #e9eff5;
+    border-radius: 0.35rem;
+    animation: softBounce 0.8s ease-out;
+
+    .card-body {
+      background-color: #ffffff;
+
+      h5 {
+        font-weight: 600;
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+        color: #2e2e2e;
+      }
+
+      .display-4 {
+        font-size: 2.25rem;
+        font-weight: bold;
+        color: #3f6ad8;
+      }
+
+      .btn {
+        margin-right: 0.5rem;
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border-radius: 0.25rem;
+        transition: transform 0.4s ease;
+
+        &:hover {
+          animation: gentlePulse 0.4s ease-in-out;
+        }
+      }
+
+      .btn-primary {
+        background-color: #3f6ad8;
+        border: none;
+      }
+
+      .btn-success {
+        background-color: #50b26b;
+        border: none;
+      }
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    animation: fadeSlide 0.8s ease-out;
+
+    th,
+    td {
+      font-size: 1rem;
+      padding: 0.75rem;
+      vertical-align: middle;
+      text-align: left;
+      background-color: #ffffff;
+    }
+
+    th {
+      background-color: #e9eff5;
+      font-weight: 600;
+      color: #2e2e2e;
+    }
+
+    td {
+      color: #2e2e2e;
+    }
+
+    .badge {
+      font-size: 1rem;
+      padding: 0.5em 0.75em;
       border-radius: 0.25rem;
       transition: background-color 0.3s ease;
-  
-      &:hover {
-        background-color: #495057;
-        text-decoration: none;
-      }
+    }
+
+    .bg-success {
+      background-color: #50b26b !important;
+    }
+
+    .bg-warning {
+      background-color: #ffd166 !important;
+      color: #2e2e2e;
     }
   }
-  
-  .main-content {
-    padding: 2rem;
-  
-    h2 {
-      margin-bottom: 2rem;
-    }
-  
-    .card {
-      margin-bottom: 1.5rem;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-  
-      .card-body {
-        h5 {
-          font-weight: 600;
-        }
-  
-        .display-4 {
-          font-size: 2.5rem;
-          font-weight: bold;
-          color: #007bff;
-        }
-  
-        .btn {
-          margin-right: 0.5rem;
-        }
-      }
-    }
-  
-    table {
-      th {
-        background-color: #f8f9fa;
-        font-weight: 600;
-      }
-  
-      td {
-        vertical-align: middle;
-      }
-  
-      .badge {
-        font-size: 0.9rem;
-        padding: 0.5em 0.75em;
-      }
-  
-      .bg-success {
-        background-color: #28a745 !important;
-      }
-  
-      .bg-warning {
-        background-color: #ffc107 !important;
-        color: #212529;
-      }
-    }
-  }
-  
+}
