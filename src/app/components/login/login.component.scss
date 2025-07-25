@@ -1,93 +1,74 @@
-.container-fluid {
+.login-container {
   height: 100vh;
-  background-color: #f8f9fa;
+  background: url('https://wallpaperbat.com/img/645546-hospital-wallpaper-top-free-hospital-background.jpg') no-repeat center center;
+  background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 2rem;
 
-  .row {
-    width: 100%;
-    max-width: 1200px;
-    height: auto; // Remove full height from row
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .login-card {
+    width: 450px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
 
-    .bg-primary {
-      background-color: #62aeff !important;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
+    .card-body {
+      padding: 2.5rem;
 
-      .text-white {
-        text-align: center;
+      .card-title {
+        font-weight: 700;
+        color: #000000;
+        font-family: 'Roboto Slab', serif;
+        font-size: 1.5rem;
+      }
 
-        h1 {
-          font-size: 2.5rem;
-          font-weight: 700;
-        }
+      .form-label {
+        font-weight: 600;
+        font-family: 'Segoe UI', sans-serif;
+      }
 
-        p {
-          font-size: 1.2rem;
-          font-weight: 400;
+      .form-control {
+        border-radius: 8px;
+        padding: 0.6rem 0.75rem;
+        font-size: 1rem;
+
+        &.is-invalid {
+          border-color: #dc3545;
         }
       }
-    }
 
-    .card {
-      border-radius: 12px;
+      .invalid-feedback {
+        font-size: 0.8rem;
+        color : red;
+      }
 
-      .card-body {
-        padding: 2rem;
+      .alert {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+      }
 
-        .card-title {
-          font-weight: 600;
-          color: #343a40;
-        }
+      .btn {
+        font-weight: 600;
+        padding: 0.6rem;
+        font-size: 0.8rem;
+        font-style: Arial;
+        border-radius: 8px;
+        color : white;
+        background-color: #480cb0; // Bootstrap green
+      }
 
-        .form-label {
+      .spinner-border {
+        vertical-align: middle;
+      }
+
+      .text-center {
+        a {
+          color: #000000;
           font-weight: 500;
-        }
 
-        .form-control {
-          border-radius: 6px;
-          padding: 0.5rem 0.75rem;
-          font-size: 1rem;
-
-          &.is-invalid {
-            border-color: #dc3545;
-          }
-        }
-
-        .invalid-feedback {
-          font-size: 0.875rem;
-        }
-
-        .alert {
-          font-size: 0.9rem;
-          padding: 0.5rem 1rem;
-        }
-
-        .btn {
-          font-weight: 600;
-          padding: 0.6rem;
-          font-size: 1rem;
-          border-radius: 6px;
-        }
-
-        .spinner-border {
-          vertical-align: middle;
-        }
-
-        .text-center {
-          a {
-            color: #007bff;
-            font-weight: 500;
-
-            &:hover {
-              text-decoration: underline;
-            }
+          &:hover {
+            text-decoration: underline;
+            background-color: #218838; 
           }
         }
       }
