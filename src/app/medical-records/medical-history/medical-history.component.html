@@ -7,14 +7,14 @@
     </button>
   </div>
 
-  <!-- Add Medical History Form -->
+  <!-- Add/Edit Medical History Form -->
   <mat-card *ngIf="showAddForm" class="add-form-card">
     <mat-card-header>
-      <mat-card-title>Add Medical History</mat-card-title>
+      <mat-card-title>{{ isEditMode ? 'Edit Medical History' : 'Add Medical History' }}</mat-card-title>
     </mat-card-header>
-    
+
     <mat-card-content>
-      <form [formGroup]="medicalHistoryForm" (ngSubmit)="addMedicalHistory()">
+      <form [formGroup]="medicalHistoryForm" (ngSubmit)="onSubmitMedicalHistory()">
         <div class="form-grid">
           <mat-form-field appearance="outline">
             <mat-label>Patient</mat-label>
@@ -40,11 +40,11 @@
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Diagnosis</mat-label>
-            <textarea matInput 
-                     formControlName="diagnosis" 
-                     rows="3" 
-                     placeholder="Enter diagnosis details..."
-                     required></textarea>
+            <textarea matInput
+                      formControlName="diagnosis"
+                      rows="3"
+                      placeholder="Enter diagnosis details..."
+                      required></textarea>
             <mat-error *ngIf="medicalHistoryForm.get('diagnosis')?.hasError('required')">
               Diagnosis is required
             </mat-error>
@@ -55,11 +55,11 @@
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Treatment</mat-label>
-            <textarea matInput 
-                     formControlName="treatment" 
-                     rows="3" 
-                     placeholder="Enter treatment details..."
-                     required></textarea>
+            <textarea matInput
+                      formControlName="treatment"
+                      rows="3"
+                      placeholder="Enter treatment details..."
+                      required></textarea>
             <mat-error *ngIf="medicalHistoryForm.get('treatment')?.hasError('required')">
               Treatment is required
             </mat-error>
@@ -68,14 +68,14 @@
             </mat-error>
           </mat-form-field>
         </div>
-        
+
         <div class="form-actions">
-          <button mat-raised-button 
-                  color="primary" 
-                  type="submit" 
+          <button mat-raised-button
+                  color="primary"
+                  type="submit"
                   [disabled]="!medicalHistoryForm.valid || loading">
             <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
-            Add Medical History
+            {{ isEditMode ? 'Update Medical History' : 'Add Medical History' }}
           </button>
         </div>
       </form>
@@ -97,7 +97,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Search Records</mat-label>
-          <input matInput (keyup)="applyFilter($event)" 
+          <input matInput (keyup)="applyFilter($event)"
                  placeholder="Search by diagnosis or treatment...">
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
@@ -119,7 +119,7 @@
 
       <div class="table-container" *ngIf="!loading">
         <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
-          
+
           <ng-container matColumnDef="historyId">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
             <td mat-cell *matCellDef="let history">#{{history.historyId}}</td>
@@ -167,7 +167,7 @@
                       matTooltip="Edit Record">
                 <mat-icon>edit</mat-icon>
               </button>
-              
+
               <button mat-icon-button color="warn"
                       (click)="deleteMedicalHistory(history)"
                       matTooltip="Delete Record">
@@ -180,7 +180,7 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
 
-        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" 
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"
                        showFirstLastButtons
                        aria-label="Select page of medical histories">
         </mat-paginator>

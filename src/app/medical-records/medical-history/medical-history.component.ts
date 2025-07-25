@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -16,7 +16,7 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
   templateUrl: './medical-history.component.html',
   styleUrls: ['./medical-history.component.scss']
 })
-export class MedicalHistoryComponent implements OnInit {
+export class MedicalHistoryComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'historyId',
     'patientId',
@@ -32,6 +32,9 @@ export class MedicalHistoryComponent implements OnInit {
   medicalHistoryForm: FormGroup;
   patients: Patient[] = [];
   selectedPatientId: number | null = null;
+
+  isEditMode = false;
+  currentEditHistoryId: number | null = null;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -56,7 +59,7 @@ export class MedicalHistoryComponent implements OnInit {
     this.loadPatients();
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -90,7 +93,7 @@ export class MedicalHistoryComponent implements OnInit {
   loadPatientHistory(patientId: number): void {
     this.loading = true;
     this.selectedPatientId = patientId;
-    
+
     this.medicalHistoryService.getMedicalHistoryByPatient(patientId).subscribe({
       next: (histories) => {
         this.dataSource.data = histories;
@@ -115,37 +118,84 @@ export class MedicalHistoryComponent implements OnInit {
 
   toggleAddForm(history?: MedicalHistory): void {
     this.showAddForm = !this.showAddForm;
+
     if (this.showAddForm && history) {
+      // Enter edit mode
+      this.isEditMode = true;
+      this.currentEditHistoryId = history.historyId;
       this.medicalHistoryForm.patchValue({
         patientId: history.patientId,
         diagnosis: history.diagnosis,
         treatment: history.treatment,
         dateRecorded: new Date(history.dateRecorded)
       });
+    } else if (this.showAddForm && !history) {
+      // Enter add mode
+      this.isEditMode = false;
+      this.currentEditHistoryId = null;
+      this.medicalHistoryForm.reset();
+      this.medicalHistoryForm.patchValue({ dateRecorded: new Date() });
     } else if (!this.showAddForm) {
+      // Reset when form is closed
+      this.isEditMode = false;
+      this.currentEditHistoryId = null;
       this.medicalHistoryForm.reset();
       this.medicalHistoryForm.patchValue({ dateRecorded: new Date() });
     }
   }
 
   editMedicalHistory(history: MedicalHistory): void {
-    this.toggleAddForm(history);
+    if (!this.showAddForm) {
+      this.toggleAddForm(history);
+    } else {
+      this.isEditMode = true;
+      this.currentEditHistoryId = history.historyId;
+      this.medicalHistoryForm.patchValue({
+        patientId: history.patientId,
+        diagnosis: history.diagnosis,
+        treatment: history.treatment,
+        dateRecorded: new Date(history.dateRecorded)
+      });
+    }
   }
 
+  onSubmitMedicalHistory(): void {
+    if (this.medicalHistoryForm.invalid) {
+      this.medicalHistoryForm.markAllAsTouched();
+      return;
+    }
 
-  addMedicalHistory(): void {
-    if (this.medicalHistoryForm.valid) {
-      this.loading = true;
-      const formData: CreateMedicalHistoryRequest = {
-        historyId: 0,
-        ...this.medicalHistoryForm.value
-      };
+    this.loading = true;
 
-      this.medicalHistoryService.addMedicalHistory(formData).subscribe({
+    const formValue = this.medicalHistoryForm.value;
+    const payload: CreateMedicalHistoryRequest = {
+      historyId: this.isEditMode && this.currentEditHistoryId ? this.currentEditHistoryId : 0,
+      ...formValue,
+    };
+
+    if (this.isEditMode && this.currentEditHistoryId) {
+      // Update
+      this.medicalHistoryService.updateMedicalHistory(this.currentEditHistoryId, payload).subscribe({
+        next: () => {
+          this.snackBar.open('Medical history updated successfully', 'Close', { duration: 3000 });
+          this.toggleAddForm();
+          this.loadMedicalHistories();
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error updating medical history:', error);
+          this.snackBar.open('Failed to update medical history', 'Close', { duration: 3000 });
+          this.loading = false;
+        }
+      });
+    } else {
+      // Add
+      this.medicalHistoryService.addMedicalHistory(payload).subscribe({
         next: () => {
           this.snackBar.open('Medical history added successfully', 'Close', { duration: 3000 });
           this.toggleAddForm();
           this.loadMedicalHistories();
+          this.loading = false;
         },
         error: (error) => {
           console.error('Error adding medical history:', error);
@@ -154,9 +204,7 @@ export class MedicalHistoryComponent implements OnInit {
           } else if (error.status === 409) {
             this.snackBar.open('Medical history already exists', 'Close', { duration: 3000 });
           } else {
-            this.snackBar.open('Medical history added successfully (please refresh to see changes)', 'Close', { duration: 3000 });
-            this.toggleAddForm();
-            this.loadMedicalHistories();
+            this.snackBar.open('Failed to add medical history', 'Close', { duration: 3000 });
           }
           this.loading = false;
         }
