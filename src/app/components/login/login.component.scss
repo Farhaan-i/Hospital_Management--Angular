@@ -1,0 +1,84 @@
+// login.component.scss
+
+.container-fluid {
+    background-color: #f8f9fa;
+  
+    .row {
+      height: 100%;
+  
+      .bg-primary {
+        background-color: #007bff !important;
+      }
+  
+      .text-white {
+        h1 {
+          font-size: 2.5rem;
+          font-weight: 700;
+        }
+  
+        p {
+          font-size: 1.2rem;
+          font-weight: 400;
+        }
+      }
+  
+      .card {
+        border-radius: 12px;
+  
+        .card-body {
+          padding: 2rem;
+  
+          .card-title {
+            font-weight: 600;
+            color: #343a40;
+          }
+  
+          .form-label {
+            font-weight: 500;
+          }
+  
+          .form-control {
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+  
+            &.is-invalid {
+              border-color: #dc3545;
+            }
+          }
+  
+          .invalid-feedback {
+            font-size: 0.875rem;
+          }
+  
+          .alert {
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+          }
+  
+          .btn {
+            font-weight: 600;
+            padding: 0.6rem;
+            font-size: 1rem;
+            border-radius: 6px;
+          }
+  
+          .spinner-border {
+            vertical-align: middle;
+          }
+  
+          .text-center {
+            a {
+              color: #007bff;
+              font-weight: 500;
+  
+              &:hover {
+                text-decoration: underline;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  

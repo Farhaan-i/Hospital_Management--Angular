@@ -28,8 +28,21 @@ import { MatMenuModule } from '@angular/material/menu';
 import { DatePipe } from '@angular/common';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { DoctorDashboardComponent } from './components/doctor-dashboard/doctor-dashboard.component';
+//import { StaffDashboardComponent } from './components/staff-dashboard/staff-dashboard.component';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+
 @NgModule({
   declarations: [
+    LoginComponent,
+    RegisterComponent,
+    DoctorDashboardComponent,
+    //StaffDashboardComponent,
     LandingPageComponent,
     AppComponent
   ],
@@ -58,9 +71,18 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
     MatStepperModule,
     MatRadioModule,
     MatChipsModule,
-    MatMenuModule
+    MatMenuModule,
+    ReactiveFormsModule,
   ],
-  providers: [DatePipe],
+  //providers: [DatePipe],
+  providers: [
+    DatePipe,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

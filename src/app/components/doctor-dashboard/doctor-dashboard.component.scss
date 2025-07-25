@@ -1,0 +1,86 @@
+// doctor-dashboard.component.scss
+
+.container-fluid {
+    padding: 0;
+  }
+  
+  .bg-dark {
+    background-color: #343a40 !important;
+  }
+  
+  .sidebar {
+    min-height: 100vh;
+    padding: 1rem;
+    background-color: #212529;
+    color: #fff;
+  
+    h4 {
+      margin-bottom: 1rem;
+    }
+  
+    .nav-link {
+      padding: 0.5rem 1rem;
+      border-radius: 0.25rem;
+      transition: background-color 0.3s ease;
+  
+      &:hover {
+        background-color: #495057;
+        text-decoration: none;
+      }
+    }
+  }
+  
+  .main-content {
+    padding: 2rem;
+  
+    h2 {
+      margin-bottom: 2rem;
+    }
+  
+    .card {
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  
+      .card-body {
+        h5 {
+          font-weight: 600;
+        }
+  
+        .display-4 {
+          font-size: 2.5rem;
+          font-weight: bold;
+          color: #007bff;
+        }
+  
+        .btn {
+          margin-right: 0.5rem;
+        }
+      }
+    }
+  
+    table {
+      th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+      }
+  
+      td {
+        vertical-align: middle;
+      }
+  
+      .badge {
+        font-size: 0.9rem;
+        padding: 0.5em 0.75em;
+      }
+  
+      .bg-success {
+        background-color: #28a745 !important;
+      }
+  
+      .bg-warning {
+        background-color: #ffc107 !important;
+        color: #212529;
+      }
+    }
+  }
+  
