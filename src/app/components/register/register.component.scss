@@ -12,41 +12,48 @@
 
   form {
     width: 100%;
-    max-width: 450px; // Same as login form
+    max-width: 450px;
     background-color: rgba(0, 0, 0, 0.1);
-    padding: 2.5rem;
+    padding: 2rem;
     border-radius: 16px;
 
     h2 {
       text-align: center;
       font-weight: 700;
       color: #000000;
-      font-size: 2rem;
-      font-family: 'Roboto Slab', serif; // Applied to heading
+      font-size: 1.5rem;
+      font-family: 'Roboto Slab', serif;
       margin-bottom: 2rem;
     }
 
     .form-group {
       margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
 
       label {
         font-weight: 600;
-        margin-bottom: 0.5rem;
-        display: block;
+        font-family: Arial, sans-serif;
+        margin-right: 0.5rem;
+        width: 35%;
       }
 
       input,
       select {
         border-radius: 8px;
-        padding: 0.6rem;
-        font-size: 1rem;
-        width: 100%;
+        padding: 0.6rem 0.75rem;
+        font-size: 0.8rem;
+        width: 60%;
+        font-family: Arial, sans-serif; /* ✅ Arial for input and dropdown */
       }
 
       .text-danger {
         font-size: 0.875rem;
         margin-top: 0.25rem;
         color: red;
+        width: 100%;
+        text-align: center;
       }
     }
 
