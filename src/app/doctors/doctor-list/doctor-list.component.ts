@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { SlotService } from '../../appointments/services/slot.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SlotDialogComponent } from './slot-dialog/slot-dialog.component';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-doctor-list',
@@ -100,6 +101,36 @@ export class DoctorListComponent implements OnInit, AfterViewInit {
 
   viewDoctorDetails(doctorId: number): void {
     this.router.navigate(['/doctors', doctorId]);
+  }
+
+
+
+  deleteDoctor(doctor: Doctor): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '350px',
+      data: {
+        title: 'Delete Doctor',
+        message: `Are you sure you want to delete Dr. ${doctor.doctorName}?`
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loading = true;
+        this.doctorService.deleteDoctor(doctor.doctorId).subscribe({
+          next: (res: string) => {
+            this.snackBar.open(res || 'Doctor deleted successfully', 'Close', { duration: 3000 });
+          this.loadDoctors();
+          this.loading = false;
+          },
+          error: (error) => {
+            console.error('Error deleting doctor:', error);
+            this.snackBar.open('Error deleting doctor', 'Close', { duration: 3000 });
+            this.loading = false;
+          }
+        });
+      }
+    });
   }
 
   viewSlots(doctor: Doctor): void {

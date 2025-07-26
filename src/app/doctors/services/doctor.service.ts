@@ -32,7 +32,7 @@ export class DoctorService {
     return this.http.put<Doctor>(`${this.apiUrl}/${id}`, doctor);
   }
 
-  deleteDoctor(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  }
+  deleteDoctor(id: number): Observable<string> {
+  return this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text' });
+}
 }
