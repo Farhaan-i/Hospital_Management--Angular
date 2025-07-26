@@ -1,14 +1,67 @@
-.container-fluid {
-  padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+/* Animations */
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-h2 { margin-bottom: 30px; }
+@keyframes gentlePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
 
+@keyframes softBounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Main Container */
+.container-fluid {
+  padding: 1rem;
+  background-color: #3f51b5;
+  animation: fadeSlide 1s ease-out;
+
+  h2 {
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    color: #ffffff;
+    text-align: center;
+  }
+
+  h3 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-top: 2rem;
+    text-align: center;
+  }
+}
+
+/* Stats Cards */
 .stats-cards {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  justify-content: center;
 
   .stat-card {
     flex: 1 1 200px;
@@ -17,30 +70,69 @@ h2 { margin-bottom: 30px; }
     color: white;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     text-align: center;
+    animation: softBounce 0.8s ease-out;
 
-    h3 { font-weight: 600; margin-bottom: 10px; }
-    .count { font-size: 3rem; font-weight: bold; }
+    h3 {
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .count {
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
   }
 
-  .doctors     { background: linear-gradient(45deg, #1e88e5, #42a5f5);}
-  .staff       { background: linear-gradient(45deg, #43a047, #66bb6a);}
-  .patients    { background: linear-gradient(45deg, #f4511e, #ff7043);}
-  .appointments{ background: linear-gradient(45deg, #8e24aa, #ab47bc);}
-  .booked      { background: linear-gradient(45deg, #1976d2, #42a5f5);}
-  .cancelled   { background: linear-gradient(45deg, #ef6c00, #ffb74d);}
+  .doctors     { background: linear-gradient(45deg, #1e88e5, #42a5f5); }
+  .staff       { background: linear-gradient(45deg, #43a047, #66bb6a); }
+  .patients    { background: linear-gradient(45deg, #f4511e, #ff7043); }
+  .appointments{ background: linear-gradient(45deg, #8e24aa, #ab47bc); }
+  .booked      { background: linear-gradient(45deg, #1976d2, #42a5f5); }
+  .cancelled   { background: linear-gradient(45deg, #ef6c00, #ffb74d); }
 }
 
+/* Appointments Chart */
 .appointments-chart {
   margin-top: 30px;
-  max-width: 600px;
-  table { width: 100%; border-collapse: collapse;}
-  th, td {
-    border: 1px solid #ddd; padding: 10px; text-align: center;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: fadeSlide 0.8s ease-out;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      background-color: #ffffff;
+      font-size: 1rem;
+    }
+
+    thead {
+      background-color: #e9eff5;
+      font-weight: 600;
+      color: #2e2e2e;
+    }
   }
-  thead { background-color: #1976d2; color: white; }
+
+  .text-muted {
+    font-size: 1rem;
+    color: #666;
+  }
 }
 
+/* Today's Appointments Summary */
 .today-appointments {
   margin-top: 40px;
-  p { font-size: 1.2rem; font-weight: 600; }
+  text-align: center;
+  animation: fadeSlide 0.8s ease-in-out;
+
+  p {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #ffffff;
+  }
 }

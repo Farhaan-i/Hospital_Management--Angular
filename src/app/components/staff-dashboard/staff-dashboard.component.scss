@@ -1,96 +1,189 @@
+
+/* Animations */
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gentlePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes softBounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Main Container */
 .container-fluid {
-    padding: 1rem;
-    background-color: #f4f7fa;
+  padding: 1rem;
+  background-color: #3f51b5;
+  animation: fadeSlide 1s ease-out;
+}
+
+/* Sidebar */
+.sidebar {
+  background: linear-gradient(to bottom, #00529B, #003D66);
+  color: white;
+
+  h4 {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    padding-left: 0.5rem;
   }
-  
-  .sidebar {
-    background: linear-gradient(to bottom, #00529B, #003D66);
+
+  .nav-link {
     color: white;
-  
-    h4 {
-      font-weight: 700;
-      margin-bottom: 1rem;
-      padding-left: 0.5rem;
-    }
-  
-    .nav-link {
-      color: white;
-      font-weight: 500;
-      padding: 0.5rem 1rem;
-  
-      &:hover {
-        background-color: #0073e6;
-        border-radius: 5px;
-        text-decoration: none;
-      }
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+
+    &:hover {
+      background-color: #0073e6;
+      border-radius: 5px;
+      text-decoration: none;
     }
   }
-  
-  .main-content {
-    padding: 2rem;
-    background-color: white;
-    min-height: 100vh;
-  
-    h2 {
-      color: #222;
-      font-weight: 700;
-    }
-  
-    h5 {
-      color: #555;
-      margin-top: -5px;
-      font-weight: 600;
-    }
-  
-    .stat-card {
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      padding: 1rem;
-      text-align: center;
-  
+}
+
+/* Main Content */
+.main-content {
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 0.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  animation: fadeSlide 0.8s ease-in-out;
+  text-align: center;
+
+  h2 {
+    margin-bottom: 1.6rem;
+    font-size: 2.5rem;
+    color: #2e2e2e;
+  }
+
+  h5 {
+    color: #555;
+    font-weight: 600;
+    margin-top: -5px;
+  }
+
+  .card {
+    margin-bottom: 1.5rem;
+    border: 1px solid #e9eff5;
+    border-radius: 0.35rem;
+    animation: softBounce 0.8s ease-out;
+
+    .card-body {
+      background-color: #ffffff;
+
       h5 {
-        margin-bottom: 1rem;
         font-weight: 600;
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+        color: #2e2e2e;
       }
-  
-      .stat-number {
-        font-size: 2.5rem;
-        font-weight: 700;
+
+      .display-4, .stat-number {
+        font-size: 2.25rem;
+        font-weight: bold;
+        color: #3f6ad8;
+      }
+
+      .btn {
+        margin-right: 0.5rem;
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border-radius: 0.25rem;
+        transition: transform 0.4s ease;
+        display: inline-block;
+
+        &:hover {
+          animation: gentlePulse 0.4s ease-in-out;
+        }
+      }
+
+      .btn-primary {
+        background-color: #3f6ad8;
+        border: none;
+        color: white;
+      }
+
+      .btn-success {
+        background-color: #50b26b;
+        border: none;
+        color: white;
       }
     }
-  
-    .appointments-card {
-      box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
-      border-radius: 8px;
-  
-      h5 {
-        font-weight: 700;
-        color: #003D66;
+  }
+
+  .appointments-card {
+    box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+    border-radius: 8px;
+
+    h5 {
+      font-weight: 700;
+      color: #003D66;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      animation: fadeSlide 0.8s ease-out;
+      margin-top: 1rem;
+
+      th, td {
+        font-size: 1rem;
+        padding: 0.75rem;
+        vertical-align: middle;
+        background-color: #ffffff;
+        text-align: center;
       }
-  
-      table {
-        margin-top: 1rem;
-  
-        th, td {
-          vertical-align: middle;
-        }
-  
-        .text-success {
-          font-weight: 600;
-        }
-        .text-warning {
-          font-weight: 600;
-        }
+
+      th {
+        background-color: #e9eff5;
+        font-weight: 600;
+        color: #2e2e2e;
+      }
+
+      td {
+        color: #2e2e2e;
+      }
+
+      .badge {
+        font-size: 1rem;
+        padding: 0.5em 0.75em;
+        border-radius: 0.25rem;
+        transition: background-color 0.3s ease;
+        display: inline-block;
+      }
+
+      .bg-success {
+        background-color: #50b26b !important;
+      }
+
+      .bg-warning {
+        background-color: #ffd166 !important;
+        color: #2e2e2e;
       }
     }
   }
-  
-  .text-success {
-    color: #28a745 !important;
-  }
-  
-  .text-warning {
-    color: #ffc107 !important;
-  }
-  
-  
+}
