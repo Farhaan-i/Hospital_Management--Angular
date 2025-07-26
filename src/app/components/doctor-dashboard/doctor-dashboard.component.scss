@@ -33,40 +33,11 @@
   }
 }
 
-/* Container */
+/* Main Container */
 .container-fluid {
   padding: 1rem;
-  background-color: #f4f7fa;
+  background-color: #3f51b5;
   animation: fadeSlide 1s ease-out;
-}
-
-/* Sidebar */
-.sidebar {
-  min-height: 10vh;
-  padding: 1.5rem;
-  background: linear-gradient(to bottom, #158aff, #34495e);
-  color: #fff;
-  animation: fadeSlide 1s ease-in;
-
-  h4 {
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
-    font-weight: bold;
-    padding : 1rem;
-  }
-
-  .nav-link {
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    font-size: 1.1rem;
-    color: #ffffff;
-    transition: background-color 0.4s ease;
-
-    &:hover {
-      background-color: #3f6ad8;
-      text-decoration: none;
-    }
-  }
 }
 
 /* Main Content */
@@ -76,10 +47,11 @@
   border-radius: 0.25rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   animation: fadeSlide 0.8s ease-in-out;
+  text-align: center; /* 🔥 Central alignment added */
 
   h2 {
-    margin-bottom: 1.5rem;
-    font-size: 2rem;
+    margin-bottom: 1.6rem;
+    font-size: 2.5rem;
     color: #2e2e2e;
   }
 
@@ -92,7 +64,7 @@
     .card-body {
       background-color: #ffffff;
 
-      h5 {
+      .card-title {
         font-weight: 600;
         font-size: 1.25rem;
         margin-bottom: 1rem;
@@ -111,6 +83,7 @@
         font-size: 1rem;
         border-radius: 0.25rem;
         transition: transform 0.4s ease;
+        display: inline-block;
 
         &:hover {
           animation: gentlePulse 0.4s ease-in-out;
@@ -120,11 +93,13 @@
       .btn-primary {
         background-color: #3f6ad8;
         border: none;
+        color: white;
       }
 
       .btn-success {
         background-color: #50b26b;
         border: none;
+        color: white;
       }
     }
   }
@@ -139,8 +114,8 @@
       font-size: 1rem;
       padding: 0.75rem;
       vertical-align: middle;
-      text-align: left;
       background-color: #ffffff;
+      text-align: center; /* ✅ Centered table content */
     }
 
     th {
@@ -158,6 +133,7 @@
       padding: 0.5em 0.75em;
       border-radius: 0.25rem;
       transition: background-color 0.3s ease;
+      display: inline-block;
     }
 
     .bg-success {
