@@ -37,7 +37,11 @@ export class LoginComponent {
         this.loading = false;
         if (response.role === 'Doctor') {
           this.router.navigate(['/doctor-dashboard']);
-        } else {
+        } 
+        else if (response.role === 'Staff') {
+          this.router.navigate(['/staff-dashboard']);
+        }
+        else {
           this.router.navigate(['/patients']);
         }
         console.log(".........................uuu.............................");
