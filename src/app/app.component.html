@@ -1,14 +1,24 @@
-
-
 <mat-toolbar color="primary">
   <button mat-icon-button (click)="sidenav.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
+
   <span>MEDICARE HOSPITAL</span>
   <span class="spacer"></span>
-  <button mat-icon-button>
+
+  <!-- Account icon with menu trigger -->
+  <button mat-icon-button [matMenuTriggerFor]="accountMenu">
     <mat-icon>account_circle</mat-icon>
   </button>
+
+  <!-- The actual menu -->
+  <mat-menu #accountMenu="matMenu">
+    <div style="padding: 16px; max-width: 220px;">
+      <p><strong>{{ currentUser?.username || 'Guest' }}</strong></p>
+      <p>Role: {{ currentUser?.role || 'N/A' }}</p>
+      <button mat-button color="warn" (click)="logout()">Logout</button>
+    </div>
+  </mat-menu>
 </mat-toolbar>
 
 <mat-sidenav-container>
