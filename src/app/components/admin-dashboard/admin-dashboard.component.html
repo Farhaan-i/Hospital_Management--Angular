@@ -1,0 +1,57 @@
+<div class="container-fluid">
+  <h2>Welcome back, {{ currentUser?.username || 'Admin' }}</h2>
+
+  <div class="stats-cards">
+    <div class="card stat-card doctors">
+      <h3>Total Doctors</h3>
+      <p class="count">{{ totalDoctors }}</p>
+    </div>
+    <div class="card stat-card staff">
+      <h3>Total Staff</h3>
+      <p class="count">{{ totalStaff }}</p>
+    </div>
+    <div class="card stat-card patients">
+      <h3>Total Patients</h3>
+      <p class="count">{{ totalPatients }}</p>
+    </div>
+    <div class="card stat-card appointments">
+      <h3>Total Appointments</h3>
+      <p class="count">{{ totalAppointments }}</p>
+    </div>
+    <div class="card stat-card booked">
+      <h3>Booked Today</h3>
+      <p class="count">{{ bookedAppointments }}</p>
+    </div>
+    <div class="card stat-card cancelled">
+      <h3>Cancelled Today</h3>
+      <p class="count">{{ cancelledAppointments }}</p>
+    </div>
+  </div>
+
+  <h3>Appointments This Month by Day</h3>
+  <div class="appointments-chart">
+    <table>
+      <thead>
+        <tr>
+          <th>Day</th>
+          <th>Appointments</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let day of Object.keys(appointmentsByDay)">
+          <td>{{ day }}</td>
+          <td>{{ appointmentsByDay[day] }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="Object.keys(appointmentsByDay).length === 0" class="text-muted text-center mt-2">
+      No data for this month
+    </div>
+  </div>
+
+  <div class="today-appointments" *ngIf="bookedAppointments + cancelledAppointments > 0">
+    <h3>Today's Appointment Summary</h3>
+    <p>Booked: {{ bookedAppointments }}</p>
+    <p>Cancelled: {{ cancelledAppointments }}</p>
+  </div>
+</div>

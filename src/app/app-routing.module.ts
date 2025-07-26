@@ -7,6 +7,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { DoctorDashboardComponent } from './components/doctor-dashboard/doctor-dashboard.component';
 import { StaffDashboardComponent } from './components/staff-dashboard/staff-dashboard.component';
 import { AuthGuard } from './guards/auth.guard';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 
 const routes: Routes = [
   //{ path: '', component: LandingPageComponent },
@@ -14,19 +15,25 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
 
-  { 
-    path: 'doctor-dashboard', 
-    component: DoctorDashboardComponent, 
+  {
+    path: 'doctor-dashboard',
+    component: DoctorDashboardComponent,
     canActivate: [AuthGuard],
     data: { role: 'Doctor' }
   },
-  { 
-    path: 'staff-dashboard', 
-    component: StaffDashboardComponent, 
+  {
+    path: 'staff-dashboard',
+    component: StaffDashboardComponent,
     canActivate: [AuthGuard],
     data: { role: 'Staff' }
   },
-  
+  {
+    path: 'admin-dashboard',
+    component: AdminDashboardComponent,
+    canActivate: [AuthGuard],  // Only if your app restricts admin dashboard
+    data: { role: 'Admin' }
+  },
+
   { path: '', redirectTo: '/patients', pathMatch: 'full' },
   {
     path: 'patients',

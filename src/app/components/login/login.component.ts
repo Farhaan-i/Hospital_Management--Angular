@@ -37,9 +37,12 @@ export class LoginComponent {
         this.loading = false;
         if (response.role === 'Doctor') {
           this.router.navigate(['/doctor-dashboard']);
-        } 
+        }
         else if (response.role === 'Staff') {
           this.router.navigate(['/staff-dashboard']);
+        }
+        else if (response.role === 'Admin') {
+          this.router.navigate(['/admin-dashboard']);
         }
         else {
           this.router.navigate(['/patients']);

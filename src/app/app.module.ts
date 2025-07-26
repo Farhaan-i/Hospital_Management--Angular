@@ -36,6 +36,10 @@ import { DoctorDashboardComponent } from './components/doctor-dashboard/doctor-d
 import { StaffDashboardComponent } from './components/staff-dashboard/staff-dashboard.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
+
+import { CommonModule } from '@angular/common'; // usually for feature modules
+
 
 @NgModule({
   declarations: [
@@ -44,10 +48,12 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     DoctorDashboardComponent,
     StaffDashboardComponent,
     LandingPageComponent,
+    AdminDashboardComponent,
     AppComponent
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
