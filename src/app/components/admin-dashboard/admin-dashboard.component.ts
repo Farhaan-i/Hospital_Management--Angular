@@ -8,16 +8,16 @@ interface Appointment {
   doctorId: number;
   slotId: number;
   appointmentDate: string;
-  status: string;
+  status: string; // e.g., 'Booked', 'Cancelled'
 }
 
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
-  styleUrls: ['./admin-dashboard.component.scss'],
+  styleUrls: ['./admin-dashboard.component.scss']
 })
 export class AdminDashboardComponent implements OnInit {
-  Object = Object; // Enables Object.keys() in template
+  Object = Object; // For template usage of Object.keys
 
   currentUser: any;
 
@@ -45,62 +45,65 @@ export class AdminDashboardComponent implements OnInit {
 
   private loadCounts() {
     this.loading = true;
-    this.http.get<any[]>('/api/Doctor/doctors').subscribe({
-      next: (docs) => (this.totalDoctors = docs.length),
-      error: (e) => console.error('Error fetching doctors count', e),
+
+    // Load total doctors
+    this.http.get<any[]>('https://localhost:7199/api/Doctor/doctors').subscribe({
+      next: (doctors) => this.totalDoctors = doctors.length,
+      error: (error) => console.error('Error fetching doctors count', error),
     });
 
-    this.http.get<any[]>('/api/Staff/all').subscribe({
-      next: (staff) => (this.totalStaff = staff.length),
-      error: (e) => console.error('Error fetching staff count', e),
+    // Load total staff
+    this.http.get<any[]>('https://localhost:7199/api/Staff/all').subscribe({
+      next: (staff) => this.totalStaff = staff.length,
+      error: (error) => console.error('Error fetching staff count', error),
     });
 
-    this.http.get<any[]>('/api/Patient/patients').subscribe({
-      next: (patients) => (this.totalPatients = patients.length),
-      error: (e) => console.error('Error fetching patients count', e),
+    // Load total patients
+    this.http.get<any[]>('https://localhost:7199/api/Patient/patients').subscribe({
+      next: (patients) => this.totalPatients = patients.length,
+      error: (error) => console.error('Error fetching patients count', error),
     });
 
-    this.http.get<Appointment[]>('/api/Appointment/appointments').subscribe({
-      next: (appts) => {
-        this.totalAppointments = appts.length;
-        const now = new Date();
-        const thisMonth = now.getMonth() + 1;
-        const thisYear = now.getFullYear();
-        // Could also tally monthly in this call if needed
-      },
-      error: (e) => console.error('Error fetching appointments', e),
-      complete: () => (this.loading = false),
+    // Load total appointments
+    this.http.get<Appointment[]>('https://localhost:7199/api/Appointment/appointments').subscribe({
+      next: (appointments) => this.totalAppointments = appointments.length,
+      error: (error) => console.error('Error fetching appointments count', error),
+      complete: () => this.loading = false
     });
   }
 
   private loadTodaysAppointments() {
-    this.http.get<Appointment[]>('/api/Appointment/today').subscribe({
-      next: (appts) => {
-        this.todayAppointments = appts;
-        this.bookedAppointments = appts.filter(a => a.status === 'Booked').length;
-        this.cancelledAppointments = appts.filter(a => a.status === 'Cancelled').length;
+    this.http.get<Appointment[]>('https://localhost:7199/api/Appointment/today').subscribe({
+      next: (appointments) => {
+        this.todayAppointments = appointments;
+        this.bookedAppointments = appointments.filter(a => a.status === 'Booked').length;
+        this.cancelledAppointments = appointments.filter(a => a.status === 'Cancelled').length;
       },
-      error: (e) => console.error('Error fetching today appointments', e),
+      error: (error) => console.error('Error loading today\'s appointments', error),
     });
   }
 
   private loadMonthlyAppointmentsData() {
-    this.http.get<Appointment[]>('/api/Appointment/appointments').subscribe({
-      next: (appts) => {
+    // Assume backend doesn't provide aggregation; aggregate client-side
+    this.http.get<Appointment[]>('https://localhost:7199/api/Appointment/appointments').subscribe({
+      next: (appointments) => {
         const now = new Date();
         const month = now.getMonth();
         const year = now.getFullYear();
+
         const counts: { [key: string]: number } = {};
-        appts.forEach(appt => {
-          const d = new Date(appt.appointmentDate);
-          if (d.getMonth() === month && d.getFullYear() === year) {
-            const day = d.getDate();
+
+        appointments.forEach(appt => {
+          const dt = new Date(appt.appointmentDate);
+          if (dt.getMonth() === month && dt.getFullYear() === year) {
+            const day = dt.getDate();
             counts[day] = (counts[day] || 0) + 1;
           }
         });
+
         this.appointmentsByDay = counts;
       },
-      error: (e) => console.error('Error loading monthly appointments', e)
+      error: (error) => console.error('Error loading monthly appointments data', error),
     });
   }
 }
