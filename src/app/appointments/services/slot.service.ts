@@ -12,12 +12,16 @@ export class SlotService {
 
   constructor(private http: HttpClient) { }
 
-  generateSlots(request: GenerateSlotsRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/GenerateSlots`, request);
+  generateSlots(request: GenerateSlotsRequest): Observable<string> {
+    return this.http.post(
+      `${this.apiUrl}/GenerateSlots`,
+      request,
+      { responseType: 'text' }
+    );
   }
 
-  deletePastSlots(doctorId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/delete-before-today/${doctorId}`);
+  deletePastSlots(doctorId: number): Observable<string> {
+    return this.http.delete(`${this.apiUrl}/delete-before-today/${doctorId}`, { responseType: 'text' });
   }
 
   getUnbookedSlots(doctorId: number): Observable<Slot[]> {

@@ -1,0 +1,105 @@
+<div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-md-2 bg-primary text-white min-vh-100 sidebar">
+        <div class="p-3">
+          <h4>Staff Portal</h4>
+          <hr>
+          <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link text-white" routerLink="/staff-dashboard">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link text-white" routerLink="/appointments">Appointments</a></li>
+            <li class="nav-item"><a class="nav-link text-white" routerLink="/patients">Patients</a></li>
+            <li class="nav-item"><a class="nav-link text-white" routerLink="/doctors">Doctors</a></li>
+          </ul>
+        </div>
+      </div>
+  
+      <!-- Main Content -->
+      <div class="col-md-10 main-content">
+        <div class="p-4">
+          <h2>Welcome, {{ currentStaff?.staffName || 'Staff' }}</h2>
+          <h5>Role: {{ currentStaff?.staffRole || '' }}</h5>
+  
+          <div class="row mt-4">
+            <div class="col-md-3">
+              <div class="card stat-card bg-info text-white">
+                <div class="card-body">
+                  <h5>Total Doctors</h5>
+                  <p class="stat-number">{{ totalDoctors }}</p>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-md-3">
+              <div class="card stat-card bg-success text-white">
+                <div class="card-body">
+                  <h5>Total Patients</h5>
+                  <p class="stat-number">{{ totalPatients }}</p>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-md-3">
+              <div class="card stat-card bg-primary text-white">
+                <div class="card-body">
+                  <h5>Appointments Booked Today</h5>
+                  <p class="stat-number">{{ bookedCount }}</p>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-md-3">
+              <div class="card stat-card bg-warning text-dark">
+                <div class="card-body">
+                  <h5>Appointments Cancelled Today</h5>
+                  <p class="stat-number">{{ cancelledCount }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row mt-4" *ngIf="!loading && todaysAppointments.length > 0">
+            <div class="col-12">
+              <div class="card appointments-card">
+                <div class="card-body">
+                  <h5>Today's Appointments</h5>
+                  <div class="table-responsive">
+                    <table class="table table-bordered">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Appointment ID</th>
+                          <th>Patient ID</th>
+                          <th>Doctor ID</th>
+                          <th>Appointment Date</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let appt of todaysAppointments">
+                          <td>{{ appt.appointmentId }}</td>
+                          <td>{{ appt.patientId }}</td>
+                          <td>{{ appt.doctorId }}</td>
+                          <td>{{ appt.appointmentDate | date: 'medium' }}</td>
+                          <td [ngClass]="{
+                            'text-success': appt.status === 'Booked',
+                            'text-warning': appt.status === 'Cancelled'
+                          }">
+                            {{ appt.status }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div *ngIf="loading" class="text-center mt-5">
+            <mat-spinner diameter="40"></mat-spinner>
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  </div>

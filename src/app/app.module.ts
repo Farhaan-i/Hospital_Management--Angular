@@ -33,7 +33,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { DoctorDashboardComponent } from './components/doctor-dashboard/doctor-dashboard.component';
-//import { StaffDashboardComponent } from './components/staff-dashboard/staff-dashboard.component';
+import { StaffDashboardComponent } from './components/staff-dashboard/staff-dashboard.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
@@ -42,7 +42,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     LoginComponent,
     RegisterComponent,
     DoctorDashboardComponent,
-    //StaffDashboardComponent,
+    StaffDashboardComponent,
     LandingPageComponent,
     AppComponent
   ],
