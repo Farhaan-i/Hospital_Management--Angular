@@ -28,6 +28,7 @@ export class StaffListComponent implements OnInit {
   dataSource = new MatTableDataSource<Staff>();
   loading = false;
   isDisplay=false;
+  staffhideButton=false;
 
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -44,7 +45,12 @@ export class StaffListComponent implements OnInit {
     const userRole = this.authService.getCurrentUser()?.role;
     console.log('Logged-in role:', userRole); // optional debugging
   
-    this.isDisplay = userRole !== 'Staff'; // true = hide staff UI
+    this.isDisplay = userRole == 'Doctor'; // true = hide staff UI
+    console.log('............................uuuuuuuuuu...........................'); 
+    console.log(userRole); // optional debugging
+    if(userRole === 'Staff' || userRole === 'Doctor') {
+      this.staffhideButton = true;
+     } // hide button for staff users
     console.log('............................uuuuuuuuuu...........................'); // optional debugging
     console.log('isDisplay:', this.isDisplay); // optional debugging
     if (!this.isDisplay) {

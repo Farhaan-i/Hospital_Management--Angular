@@ -11,6 +11,7 @@ import { SlotService } from '../../appointments/services/slot.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SlotDialogComponent } from './slot-dialog/slot-dialog.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
+import { AuthService } from '../../services/auth.service'; 
 
 @Component({
   selector: 'app-doctor-list',
@@ -28,6 +29,7 @@ export class DoctorListComponent implements OnInit, AfterViewInit {
   ];
   dataSource = new MatTableDataSource<Doctor>();
   loading = false;
+  disableAddDoctorButton: boolean = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -37,11 +39,21 @@ export class DoctorListComponent implements OnInit, AfterViewInit {
     private slotService: SlotService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private authService: AuthService 
   ) {}
 
   ngOnInit(): void {
+    this.checkUserRole();
     this.loadDoctors();
+  }
+  checkUserRole(): void {
+    // Simulate fetching role from a service or localStorage
+    const userRole = this.authService.getCurrentUser()?.role;
+    console.log('DoctorListComponent Role:', userRole); 
+
+    // Disable button unless user is Admin
+    this.disableAddDoctorButton = userRole !== 'Admin';
   }
 
   loadDoctors(): void {

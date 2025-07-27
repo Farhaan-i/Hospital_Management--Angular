@@ -2,7 +2,7 @@
   <div class="header">
     <h1>Doctor Management</h1>
     <div class="action-buttons">
-      <button mat-raised-button color="primary" (click)="openDoctorForm()">
+      <button mat-raised-button color="primary" (click)="openDoctorForm()" [disabled]="disableAddDoctorButton">
         <mat-icon>add</mat-icon>
         Add Doctor
       </button>
