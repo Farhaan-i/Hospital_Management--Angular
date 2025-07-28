@@ -36,14 +36,16 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th>Time</th>
+                        <th>Date</th>
+                        <th>Time Slot</th>
                         <th>Patient ID</th>
                         <th>Status</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr *ngFor="let appointment of todaysAppointments">
-                        <td>{{ appointment.appointmentDate | date:'short' }}</td>
+                        <td>{{ getSlotDate(appointment.slotId) }}</td>
+                        <td>{{ getTimeSlot(appointment.slotId) }}</td>
                         <td>{{ appointment.patientId }}</td>
                         <td>
                           <span class="badge bg-success" *ngIf="appointment.status === 'Booked'">{{ appointment.status }}</span>
